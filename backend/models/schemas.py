@@ -150,3 +150,136 @@ class OptimizeResponse(BaseModel):
     population_size: int
     converged_early: bool
     initial_metrics: Optional[InitialMetrics] = None
+
+
+class StreamGenerationEvent(BaseModel):
+    type: str = "generation"
+    generation: int
+    best_fitness: float
+    avg_fitness: float
+    best_cost: float
+    hard_violations: int
+    soft_penalty: float
+    faculty_conflicts: int
+    student_conflicts: int
+    room_conflicts: int
+    capacity_violations: int
+    converged_early: bool = False
+    timetable: Optional[List[GeneOut]] = None
+
+
+class StreamCompleteEvent(BaseModel):
+    type: str = "complete"
+    generations_executed: int
+    execution_time_seconds: float
+    final_cost: float
+    final_fitness: float
+    converged_early: bool
+    constraints: ConstraintReport
+    timetable: List[GeneOut]
+
+
+class BenchmarkConfig(BaseModel):
+    algorithms: List[str] = ["ga", "simulated_annealing", "greedy", "random_search"]
+    iterations: int = Field(default=150, ge=10, le=1000)
+    population_size: int = Field(default=50, ge=10, le=200)
+    sa_initial_temp: float = Field(default=100.0, gt=0.0)
+    sa_cooling_rate: float = Field(default=0.95, gt=0.8, lt=1.0)
+    random_seed: Optional[int] = 42
+
+
+class BenchmarkIterationPoint(BaseModel):
+    iteration: int
+    best_cost: float
+    best_fitness: float
+    hard_violations: int
+    soft_penalty: float
+
+
+class AlgorithmBenchmarkResult(BaseModel):
+    algorithm_key: str
+    algorithm_name: str
+    final_cost: float
+    final_fitness: float
+    hard_violations: int
+    soft_violations: int
+    execution_time_seconds: float
+    converged_zero_hard: bool
+    history: List[BenchmarkIterationPoint]
+    constraints: ConstraintReport
+
+
+class BenchmarkRequest(BaseModel):
+    dataset: DatasetInput
+    config: BenchmarkConfig = BenchmarkConfig()
+
+
+class BenchmarkResponse(BaseModel):
+    results: List[AlgorithmBenchmarkResult]
+    winner_algorithm: str
+    summary: str
+
+
+class ChromosomeSnapshot(BaseModel):
+    genes: List[GeneOut]
+    cost: float
+    fitness: float
+    hard_violations: int
+    soft_violations: int
+
+
+class SelectionVisualizer(BaseModel):
+    candidates: List[ChromosomeSnapshot]
+    winner_index: int
+
+
+class CrossoverVisualizer(BaseModel):
+    parent_a: ChromosomeSnapshot
+    parent_b: ChromosomeSnapshot
+    point_1: int
+    point_2: int
+    child_a: ChromosomeSnapshot
+    child_b: ChromosomeSnapshot
+
+
+class MutationVisualizer(BaseModel):
+    before: ChromosomeSnapshot
+    after: ChromosomeSnapshot
+    mutated_gene_indices: List[int]
+
+
+class RepairVisualizer(BaseModel):
+    before: ChromosomeSnapshot
+    after: ChromosomeSnapshot
+    repaired_gene_indices: List[int]
+    conflicts_resolved: int
+
+
+class VisualizerStepRequest(BaseModel):
+    dataset: DatasetInput
+    tournament_size: int = Field(default=3, ge=2, le=10)
+    mutation_rate: float = Field(default=0.2, ge=0.01, le=1.0)
+    random_seed: Optional[int] = None
+
+
+class VisualizerStepResponse(BaseModel):
+    selection: SelectionVisualizer
+    crossover: CrossoverVisualizer
+    mutation: MutationVisualizer
+    repair: RepairVisualizer
+
+
+class ScenarioMeta(BaseModel):
+    id: str
+    name: str
+    description: str
+    difficulty: str
+    num_subjects: int
+    num_faculty: int
+    num_rooms: int
+    num_batches: int
+
+
+class ScenarioPreset(BaseModel):
+    metadata: ScenarioMeta
+    dataset: DatasetInput

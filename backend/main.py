@@ -10,18 +10,23 @@ Endpoints:
     GET  /api/health      -> health check
 """
 from __future__ import annotations
+import json
+from typing import List, Optional
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import PlainTextResponse
+from fastapi.responses import PlainTextResponse, StreamingResponse
 from pydantic import BaseModel
-from typing import List
 
 from backend.models.schemas import (
     OptimizeRequest, OptimizeResponse, GeneOut, GenerationStat, ConstraintReport, DatasetInput,
-    InitialMetrics,
+    InitialMetrics, BenchmarkRequest, BenchmarkResponse, VisualizerStepRequest,
+    VisualizerStepResponse, ScenarioPreset,
 )
-from backend.data.sample_data import build_sample_dataset
-from backend.optimizer.ga import run_ga
+from backend.data.sample_data import build_sample_dataset, get_all_presets, get_preset_by_id
+from backend.optimizer.ga import run_ga, stream_ga
+from backend.optimizer.chromosome import chromosome_to_timetable
+from backend.optimizer.baselines.benchmark import run_benchmark
+from backend.optimizer.visualizer import generate_visualizer_step
 from backend.utils.export import timetable_to_csv
 
 app = FastAPI(title="University Timetable Optimizer", version="1.0.0")
@@ -56,19 +61,7 @@ def optimize(request: OptimizeRequest):
         raise HTTPException(status_code=500, detail=f"Optimization failed: {exc}") from exc
 
     ctx = result.context
-    timetable: List[GeneOut] = []
-    for gene in result.best_chromosome:
-        subj = ctx.subject_by_id[gene.subject_id]
-        fac = ctx.faculty_by_id[gene.faculty_id]
-        batch = ctx.batch_by_id[gene.batch_id]
-        room = ctx.room_by_id[gene.room_id]
-        timetable.append(GeneOut(
-            subject_id=gene.subject_id, subject_name=subj.name,
-            faculty_id=gene.faculty_id, faculty_name=fac.name,
-            batch_id=gene.batch_id, batch_name=batch.name,
-            room_id=gene.room_id, room_number=room.room_number,
-            day=gene.day, period=gene.period,
-        ))
+    timetable = chromosome_to_timetable(result.best_chromosome, ctx)
 
     history = [
         GenerationStat(
@@ -121,6 +114,63 @@ def optimize(request: OptimizeRequest):
         converged_early=result.converged_early,
         initial_metrics=initial_metrics,
     )
+
+
+@app.post("/api/optimize/stream")
+def optimize_stream(request: OptimizeRequest):
+    dataset = request.dataset
+    if not dataset.subjects:
+        raise HTTPException(status_code=422, detail="Dataset must include at least one subject.")
+
+    def event_stream():
+        try:
+            for event in stream_ga(dataset, request.config):
+                yield f"data: {json.dumps(event)}\n\n"
+        except Exception as exc:
+            yield f"data: {json.dumps({'type': 'error', 'message': str(exc)})}\n\n"
+
+    return StreamingResponse(
+        event_stream(),
+        media_type="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "Connection": "keep-alive",
+            "X-Accel-Buffering": "no",
+        },
+    )
+
+
+@app.post("/api/benchmark", response_model=BenchmarkResponse)
+def benchmark(request: BenchmarkRequest):
+    if not request.dataset.subjects:
+        raise HTTPException(status_code=422, detail="Dataset must include at least one subject.")
+    try:
+        return run_benchmark(request.dataset, request.config)
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=f"Benchmark execution failed: {exc}") from exc
+
+
+@app.post("/api/visualizer/step", response_model=VisualizerStepResponse)
+def visualizer_step(request: VisualizerStepRequest):
+    if not request.dataset.subjects:
+        raise HTTPException(status_code=422, detail="Dataset must include at least one subject.")
+    try:
+        return generate_visualizer_step(request)
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=f"Visualizer step generation failed: {exc}") from exc
+
+
+@app.get("/api/scenarios", response_model=List[ScenarioPreset])
+def list_scenarios():
+    return get_all_presets()
+
+
+@app.get("/api/scenarios/{scenario_id}", response_model=ScenarioPreset)
+def get_scenario(scenario_id: str):
+    preset = get_preset_by_id(scenario_id)
+    if preset is None:
+        raise HTTPException(status_code=404, detail=f"Scenario preset '{scenario_id}' not found.")
+    return preset
 
 
 class ExportRequest(BaseModel):

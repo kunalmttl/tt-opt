@@ -24,7 +24,10 @@ from dataclasses import dataclass
 from typing import List, Optional
 
 from backend.models.schemas import DatasetInput, GAConfig
-from backend.optimizer.chromosome import ProblemContext, Chromosome, create_initial_population, create_random_chromosome
+from backend.optimizer.chromosome import (
+    ProblemContext, Chromosome, create_initial_population, create_random_chromosome,
+    chromosome_to_timetable,
+)
 from backend.optimizer.fitness import evaluate, ConstraintCounts
 from backend.optimizer.operators import (
     tournament_selection, two_point_crossover, mutate, repair,
@@ -219,3 +222,165 @@ def run_ga(dataset: DatasetInput, config: GAConfig) -> GAResult:
         initial_fitness=initial_fitness,
         initial_counts=initial_counts,
     )
+
+
+def stream_ga(dataset: DatasetInput, config: GAConfig, emit_timetable_interval: int = 5):
+    start_time = time.time()
+    rng = random.Random(config.random_seed) if config.random_seed is not None else random.Random()
+
+    ctx = ProblemContext.build(dataset)
+    population = create_initial_population(
+        ctx, config.population_size, rng, greedy_fraction=config.greedy_init_fraction
+    )
+
+    best_chromosome: Optional[Chromosome] = None
+    best_cost = float("inf")
+    best_fitness = 0.0
+    best_counts: Optional[ConstraintCounts] = None
+    stagnant_generations = 0
+    converged_early = False
+    generations_executed = 0
+
+    for generation in range(1, config.generations + 1):
+        generations_executed = generation
+
+        evaluations = [evaluate(chromo, ctx, config) for chromo in population]
+        costs = [e[0] for e in evaluations]
+        fitnesses = [e[1] for e in evaluations]
+        counts_list = [e[2] for e in evaluations]
+
+        gen_best_idx = min(range(len(population)), key=lambda i: costs[i])
+        gen_best_cost = costs[gen_best_idx]
+        gen_best_fitness = fitnesses[gen_best_idx]
+        avg_fitness = sum(fitnesses) / len(fitnesses)
+        current_counts = counts_list[gen_best_idx]
+
+        improved = gen_best_cost < best_cost
+        if improved:
+            best_cost = gen_best_cost
+            best_fitness = gen_best_fitness
+            best_chromosome = [g.copy() for g in population[gen_best_idx]]
+            best_counts = current_counts
+            stagnant_generations = 0
+        else:
+            stagnant_generations += 1
+
+        hard_violations = current_counts.hard_total
+        soft_penalty = gen_best_cost - (
+            config.hard_faculty_conflict * current_counts.faculty_conflicts
+            + config.hard_student_conflict * current_counts.student_conflicts
+            + config.hard_room_conflict * current_counts.room_conflicts
+            + config.capacity_violation * current_counts.capacity_violations
+        )
+
+        should_emit_timetable = (
+            generation == 1
+            or improved
+            or generation % emit_timetable_interval == 0
+            or generation == config.generations
+        )
+
+        event = {
+            "type": "generation",
+            "generation": generation,
+            "best_fitness": round(gen_best_fitness, 6),
+            "avg_fitness": round(avg_fitness, 6),
+            "best_cost": round(gen_best_cost, 2),
+            "hard_violations": hard_violations,
+            "soft_penalty": round(soft_penalty, 2),
+            "faculty_conflicts": current_counts.faculty_conflicts,
+            "student_conflicts": current_counts.student_conflicts,
+            "room_conflicts": current_counts.room_conflicts,
+            "capacity_violations": current_counts.capacity_violations,
+            "converged_early": False,
+        }
+        if should_emit_timetable and best_chromosome is not None:
+            event["timetable"] = [
+                g.model_dump() for g in chromosome_to_timetable(best_chromosome, ctx)
+            ]
+
+        yield event
+
+        if best_counts is not None and best_counts.hard_total == 0 and config.stagnation_limit is not None \
+                and stagnant_generations >= config.stagnation_limit:
+            converged_early = True
+            break
+
+        if generation == config.generations:
+            break
+
+        effective_mutation_rate = _compute_effective_mutation_rate(config, stagnant_generations)
+
+        ranked_indices = sorted(range(len(population)), key=lambda i: costs[i])
+        next_population: List[Chromosome] = [
+            [g.copy() for g in population[i]] for i in ranked_indices[:config.elite_count]
+        ]
+
+        while len(next_population) < config.population_size:
+            parent_a = tournament_selection(population, fitnesses, config.tournament_size, rng)
+            parent_b = tournament_selection(population, fitnesses, config.tournament_size, rng)
+
+            if rng.random() < config.crossover_rate:
+                child_a, child_b = two_point_crossover(parent_a, parent_b, rng)
+            else:
+                child_a, child_b = parent_a, parent_b
+
+            for child in (child_a, child_b):
+                if config.swap_mutation_prob > 0.0 and rng.random() < config.swap_mutation_prob:
+                    swap_mutate(child, ctx, effective_mutation_rate, rng)
+                else:
+                    mutate(child, ctx, effective_mutation_rate, rng)
+
+            repair(child_a, ctx, rng)
+            repair(child_b, ctx, rng)
+
+            next_population.append(child_a)
+            if len(next_population) < config.population_size:
+                next_population.append(child_b)
+
+        if config.diversity_injection and stagnant_generations > 0 \
+                and stagnant_generations % config.diversity_trigger_gens == 0:
+            replace_count = max(1, int(config.population_size * config.diversity_replace_pct))
+            for idx in range(
+                len(next_population) - 1,
+                max(config.elite_count - 1, len(next_population) - 1 - replace_count),
+                -1,
+            ):
+                fresh = create_random_chromosome(ctx, rng)
+                repair(fresh, ctx, rng)
+                next_population[idx] = fresh
+
+        if config.local_search_enabled:
+            ls_evals = [evaluate(chromo, ctx, config) for chromo in next_population]
+            ls_costs = [e[0] for e in ls_evals]
+            ls_ranked = sorted(range(len(next_population)), key=lambda i: ls_costs[i])
+            for rank_pos in range(min(config.local_search_top_k, len(ls_ranked))):
+                idx = ls_ranked[rank_pos]
+                local_search(next_population[idx], ctx, config, config.local_search_iterations, rng)
+
+        population = next_population
+
+    execution_time = time.time() - start_time
+    assert best_chromosome is not None and best_counts is not None
+
+    complete_event = {
+        "type": "complete",
+        "generations_executed": generations_executed,
+        "execution_time_seconds": round(execution_time, 3),
+        "final_cost": round(best_cost, 2),
+        "final_fitness": round(best_fitness, 6),
+        "converged_early": converged_early,
+        "constraints": {
+            "faculty_conflicts": best_counts.faculty_conflicts,
+            "student_conflicts": best_counts.student_conflicts,
+            "room_conflicts": best_counts.room_conflicts,
+            "capacity_violations": best_counts.capacity_violations,
+            "faculty_gaps": best_counts.faculty_gaps,
+            "student_gaps": best_counts.student_gaps,
+            "distribution_penalties": best_counts.distribution_penalty_units,
+        },
+        "timetable": [
+            g.model_dump() for g in chromosome_to_timetable(best_chromosome, ctx)
+        ],
+    }
+    yield complete_event

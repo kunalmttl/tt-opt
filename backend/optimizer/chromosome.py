@@ -21,7 +21,7 @@ import random
 from dataclasses import dataclass, field
 from typing import List
 
-from backend.models.schemas import DatasetInput
+from backend.models.schemas import DatasetInput, GeneOut
 
 
 @dataclass
@@ -247,3 +247,20 @@ def create_initial_population(ctx: ProblemContext, size: int, rng: random.Random
         else:
             population.append(create_random_chromosome(ctx, rng))
     return population
+
+
+def chromosome_to_timetable(chromosome: Chromosome, ctx: ProblemContext) -> List[GeneOut]:
+    result: List[GeneOut] = []
+    for gene in chromosome:
+        subj = ctx.subject_by_id[gene.subject_id]
+        fac = ctx.faculty_by_id[gene.faculty_id]
+        batch = ctx.batch_by_id[gene.batch_id]
+        room = ctx.room_by_id[gene.room_id]
+        result.append(GeneOut(
+            subject_id=gene.subject_id, subject_name=subj.name,
+            faculty_id=gene.faculty_id, faculty_name=fac.name,
+            batch_id=gene.batch_id, batch_name=batch.name,
+            room_id=gene.room_id, room_number=room.room_number,
+            day=gene.day, period=gene.period,
+        ))
+    return result
