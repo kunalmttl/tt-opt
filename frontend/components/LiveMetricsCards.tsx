@@ -57,18 +57,18 @@ export const LiveMetricsCards: React.FC<LiveMetricsCardsProps> = ({
             <span className="text-xs text-muted font-mono">conflicts</span>
           </div>
 
-          <div className="mt-4 flex items-center justify-between text-xs">
+          <div className="mt-4 flex items-center justify-between text-xs font-mono">
             <span
-              className={`px-2.5 py-1 rounded-full text-[10px] font-mono uppercase tracking-wider ${
+              className={`px-2.5 py-0.5 rounded-full text-[10px] font-mono uppercase tracking-wider whitespace-nowrap ${
                 isFeasible
                   ? "bg-lime-muted text-lime border border-lime-border"
                   : "bg-rose-500/10 text-rose-400 border border-rose-500/20"
               }`}
             >
-              {isFeasible ? "Optimum Feasible" : "Infeasible Conflicts"}
+              {isFeasible ? "Feasible" : "Infeasible"}
             </span>
-            <span className="text-[11px] text-muted font-mono">
-              {isFeasible ? "0 double-bookings" : "Resolving clashes"}
+            <span className="text-[11px] text-muted whitespace-nowrap">
+              {isFeasible ? "0 clashes" : `${hardViolations} to resolve`}
             </span>
           </div>
         </div>
