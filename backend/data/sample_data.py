@@ -5,7 +5,7 @@ from backend.models.schemas import (
 )
 
 DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri"]
-PERIODS_PER_DAY = 6
+PERIODS_PER_DAY = 8
 
 _FACULTY_NAMES = [
     "Dr. A. Sharma", "Dr. B. Mehta", "Dr. C. Rao", "Dr. D. Iyer", "Dr. E. Nair",
@@ -114,7 +114,7 @@ def build_compact_dataset() -> DatasetInput:
         rooms=rooms,
         batches=batches,
         days=["Mon", "Tue", "Wed", "Thu", "Fri"],
-        periods_per_day=4,
+        periods_per_day=8,
     )
 
 
@@ -154,7 +154,7 @@ def build_high_constraint_dataset() -> DatasetInput:
         rooms=rooms,
         batches=batches,
         days=["Mon", "Tue", "Wed", "Thu", "Fri"],
-        periods_per_day=5,
+        periods_per_day=8,
     )
 
 
@@ -168,7 +168,7 @@ def get_all_presets() -> list[ScenarioPreset]:
             metadata=ScenarioMeta(
                 id="standard-university",
                 name="Standard Engineering College",
-                description="Realistic university curriculum with 30 subjects, 20 professors, and 10 rooms across 5 batches.",
+                description="8:00 AM – 5:00 PM college schedule with 1:00 – 2:00 PM lunch break. 30 subjects, 20 professors, 10 rooms across 5 batches.",
                 difficulty="Moderate",
                 num_subjects=len(standard.subjects),
                 num_faculty=len(standard.faculty),
@@ -181,7 +181,7 @@ def get_all_presets() -> list[ScenarioPreset]:
             metadata=ScenarioMeta(
                 id="compact-demo",
                 name="Fast Interactive Demo",
-                description="Lightweight department schedule with 8 subjects and 4 rooms. Optimized for instant live demonstrations.",
+                description="8:00 AM – 5:00 PM college schedule with 1:00 – 2:00 PM lunch break. 8 subjects, 6 faculty, 4 rooms for live demos.",
                 difficulty="Easy",
                 num_subjects=len(compact.subjects),
                 num_faculty=len(compact.faculty),
@@ -194,7 +194,7 @@ def get_all_presets() -> list[ScenarioPreset]:
             metadata=ScenarioMeta(
                 id="high-constraint",
                 name="High-Congestion Stress Test",
-                description="Dense schedule with 18 courses competing for only 4 rooms, demonstrating robust conflict resolution.",
+                description="8:00 AM – 5:00 PM college schedule. 18 dense courses competing for 4 rooms across 4 batches.",
                 difficulty="Hard",
                 num_subjects=len(high_constraint.subjects),
                 num_faculty=len(high_constraint.faculty),
