@@ -73,7 +73,7 @@ export const TimetableGrid: React.FC<TimetableGridProps> = ({ timetable, dataset
     return (
       <div
         key={`${day}-${period}`}
-        className="p-3 border-r last:border-r-0 border-surface-border min-h-[115px] flex flex-col gap-2"
+        className="p-2 border-r last:border-r-0 border-surface-border min-h-[110px] min-w-0 flex flex-col justify-center gap-1.5 overflow-hidden"
       >
         {genes.length === 0 ? (
           <div className="h-full flex items-center justify-center text-[10px] text-neutral-700 font-mono">
@@ -83,23 +83,23 @@ export const TimetableGrid: React.FC<TimetableGridProps> = ({ timetable, dataset
           genes.map((gene, idx) => (
             <div
               key={idx}
-              className="p-3 rounded-xl border border-surface-border bg-surface-raised/90 flex flex-col gap-1.5 text-[11px] transition-all hover:border-lime-border group shadow-sm"
+              className="p-2.5 rounded-xl border border-surface-border bg-surface-raised/95 flex flex-col gap-1 text-[11px] min-w-0 overflow-hidden shadow-sm hover:border-lime-border transition-all"
             >
               <div
-                className="font-medium text-white truncate text-xs"
+                className="font-medium text-white truncate text-xs leading-tight"
                 title={gene.subject_name}
               >
                 {gene.subject_name}
               </div>
 
-              <div className="flex items-center gap-1.5 text-muted truncate text-[10px]">
+              <div className="flex items-center gap-1 text-muted truncate text-[10px]">
                 <User className="h-3 w-3 shrink-0 text-neutral-400" />
                 <span className="truncate">{gene.faculty_name}</span>
               </div>
 
-              <div className="flex items-center justify-between text-[10px] text-neutral-400 mt-1 pt-1.5 border-t border-surface-border">
-                <span className="font-mono text-lime">{gene.batch_name}</span>
-                <span className="flex items-center gap-1 font-mono text-muted">
+              <div className="flex items-center justify-between text-[10px] mt-1 pt-1 border-t border-surface-border/70 min-w-0 gap-1 font-mono">
+                <span className="text-lime truncate">{gene.batch_name}</span>
+                <span className="flex items-center gap-0.5 text-muted shrink-0 whitespace-nowrap">
                   <MapPin className="h-2.5 w-2.5" />
                   {gene.room_number}
                 </span>
@@ -202,10 +202,10 @@ export const TimetableGrid: React.FC<TimetableGridProps> = ({ timetable, dataset
           No active timetable yet. Click &quot;Start GA Evolution&quot; to optimize sessions across 8 AM – 5 PM.
         </div>
       ) : (
-        <div className="overflow-x-auto">
-          <div className="min-w-[1250px] border border-surface-border rounded-2xl overflow-hidden bg-surface">
-            {/* Table Header: Day | Periods 1-5 | LUNCH | Periods 6-8 */}
-            <div className="grid grid-cols-[80px_repeat(5,1fr)_75px_repeat(3,1fr)] bg-surface-raised/70 border-b border-surface-border text-xs text-muted font-medium">
+        <div className="overflow-x-auto w-full">
+          <div className="min-w-[980px] w-full border border-surface-border rounded-2xl overflow-hidden bg-surface">
+            {/* Table Header: Day (64px) | Periods 1-5 (minmax(0, 1fr)) | LUNCH (44px) | Periods 6-8 (minmax(0, 1fr)) */}
+            <div className="grid grid-cols-[64px_repeat(5,minmax(0,1fr))_44px_repeat(3,minmax(0,1fr))] bg-surface-raised/70 border-b border-surface-border text-xs text-muted font-medium">
               <div className="p-3 border-r border-surface-border font-mono text-[11px] text-neutral-400 flex items-center justify-center">
                 Day
               </div>
@@ -214,25 +214,25 @@ export const TimetableGrid: React.FC<TimetableGridProps> = ({ timetable, dataset
               {[1, 2, 3, 4, 5].map((p) => (
                 <div
                   key={p}
-                  className="p-3 border-r border-surface-border text-center flex flex-col justify-center"
+                  className="p-3 border-r border-surface-border text-center flex flex-col justify-center min-w-0"
                 >
-                  <span className="font-mono text-xs text-white font-medium">
+                  <span className="font-mono text-xs text-white font-medium truncate">
                     {PERIOD_TIMES[p].label}
                   </span>
-                  <span className="text-[10px] text-muted font-mono mt-0.5">
+                  <span className="text-[10px] text-muted font-mono mt-0.5 truncate">
                     {PERIOD_TIMES[p].time}
                   </span>
                 </div>
               ))}
 
               {/* LUNCH BREAK COLUMN HEADER */}
-              <div className="p-3 border-r border-surface-border text-center bg-[#151a13] flex flex-col justify-center items-center">
-                <div className="flex items-center gap-1 text-[11px] font-mono text-lime font-medium">
-                  <Coffee className="h-3 w-3" />
-                  <span>LUNCH</span>
-                </div>
-                <span className="text-[9px] text-lime/70 font-mono mt-0.5">
-                  1:00 – 2:00 PM
+              <div className="p-2 border-r border-surface-border text-center bg-[#151a13] flex flex-col justify-center items-center">
+                <Coffee className="h-3 w-3 text-lime" />
+                <span className="text-[9px] font-mono text-lime font-medium mt-0.5">
+                  LUNCH
+                </span>
+                <span className="text-[8px] text-lime/70 font-mono">
+                  1-2 PM
                 </span>
               </div>
 
@@ -240,12 +240,12 @@ export const TimetableGrid: React.FC<TimetableGridProps> = ({ timetable, dataset
               {[6, 7, 8].map((p) => (
                 <div
                   key={p}
-                  className="p-3 border-r last:border-r-0 border-surface-border text-center flex flex-col justify-center"
+                  className="p-3 border-r last:border-r-0 border-surface-border text-center flex flex-col justify-center min-w-0"
                 >
-                  <span className="font-mono text-xs text-white font-medium">
+                  <span className="font-mono text-xs text-white font-medium truncate">
                     {PERIOD_TIMES[p].label}
                   </span>
-                  <span className="text-[10px] text-muted font-mono mt-0.5">
+                  <span className="text-[10px] text-muted font-mono mt-0.5 truncate">
                     {PERIOD_TIMES[p].time}
                   </span>
                 </div>
@@ -256,7 +256,7 @@ export const TimetableGrid: React.FC<TimetableGridProps> = ({ timetable, dataset
             {days.map((day) => (
               <div
                 key={day}
-                className="grid grid-cols-[80px_repeat(5,1fr)_75px_repeat(3,1fr)] border-b last:border-b-0 border-surface-border hover:bg-white/[0.015] transition-colors"
+                className="grid grid-cols-[64px_repeat(5,minmax(0,1fr))_44px_repeat(3,minmax(0,1fr))] border-b last:border-b-0 border-surface-border hover:bg-white/[0.015] transition-colors"
               >
                 {/* Day Header */}
                 <div className="p-4 border-r border-surface-border font-mono text-xs font-semibold text-lime flex items-center justify-center bg-surface-raised/30">
@@ -267,9 +267,8 @@ export const TimetableGrid: React.FC<TimetableGridProps> = ({ timetable, dataset
                 {[1, 2, 3, 4, 5].map((period) => renderPeriodCell(day, period))}
 
                 {/* Lunch Break Divider Cell */}
-                <div className="border-r border-surface-border bg-gradient-to-b from-[#141a12]/60 to-[#10140e]/60 flex flex-col items-center justify-center gap-1 p-2 text-center">
-                  <Coffee className="h-4 w-4 text-lime/50" />
-                  <span className="text-[10px] font-mono text-lime/80 uppercase tracking-widest [writing-mode:vertical-lr] rotate-180 py-1">
+                <div className="border-r border-surface-border bg-gradient-to-b from-[#141a12]/60 to-[#10140e]/60 flex flex-col items-center justify-center p-1 text-center select-none">
+                  <span className="text-[9px] font-mono text-lime/70 uppercase tracking-widest [writing-mode:vertical-lr] rotate-180">
                     LUNCH BREAK
                   </span>
                 </div>
