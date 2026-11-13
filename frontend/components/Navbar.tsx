@@ -101,18 +101,6 @@ export const Navbar: React.FC<NavbarProps> = ({
             <Database className="h-3.5 w-3.5 text-muted" />
             Scenario Editor
           </button>
-
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl text-[11px] font-mono border border-border bg-surface-raised shadow-sm">
-            <span
-              className={cn(
-                "h-2 w-2 rounded-full",
-                isBackendConnected ? "bg-emerald-500" : "bg-coral animate-pulse"
-              )}
-            />
-            <span className="text-text-secondary">
-              {isBackendConnected ? "Connected" : "Offline"}
-            </span>
-          </div>
         </div>
       </div>
     </header>
