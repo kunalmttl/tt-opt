@@ -3,8 +3,8 @@
 import React, { useState } from "react";
 import {
   ResponsiveContainer,
-  LineChart,
-  Line,
+  AreaChart,
+  Area,
   XAxis,
   YAxis,
   Tooltip,
@@ -21,46 +21,60 @@ export const ConvergenceChart: React.FC<ConvergenceChartProps> = ({ history }) =
 
   if (!history || history.length === 0) {
     return (
-      <div className="p-6 rounded-xl border border-border bg-surface h-72 flex items-center justify-center text-muted text-xs">
-        Run the optimizer to stream live convergence data.
+      <div className="p-8 rounded-3xl border border-surface-border bg-gradient-to-b from-surface to-[#0c0e11] h-72 flex items-center justify-center text-muted text-xs font-mono">
+        Start the optimizer above to watch the Genetic Algorithm converge in real time.
       </div>
     );
   }
 
+  const metricColors = {
+    cost: { stroke: "#d4f938", fill: "url(#limeGradient)", name: "Objective Cost" },
+    hard: { stroke: "#f43f5e", fill: "url(#roseGradient)", name: "Hard Conflicts" },
+    fitness: { stroke: "#10b981", fill: "url(#emeraldGradient)", name: "Fitness Score" },
+  };
+
+  const currentMetric = metricColors[metric];
+
   return (
-    <div className="p-6 rounded-xl border border-border bg-surface flex flex-col gap-4">
+    <div className="p-8 rounded-3xl border border-surface-border bg-gradient-to-b from-surface to-[#0c0e11] flex flex-col gap-6 shadow-sm">
       {/* Header and Toggle */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-sm font-medium text-white tracking-tight">
+          <span className="text-[11px] font-mono tracking-widest uppercase text-muted">
             Convergence Trajectory
+          </span>
+          <h2 className="text-base font-semibold text-white tracking-tight mt-0.5">
+            Objective Function Landscape
           </h2>
-          <p className="text-xs text-muted mt-0.5">
-            Generation-by-generation evolution progress
-          </p>
         </div>
 
-        <div className="flex items-center gap-1 p-0.5 rounded-lg bg-surface-raised border border-border text-[11px] font-mono">
+        <div className="flex items-center gap-1 p-1 rounded-2xl bg-surface-raised border border-surface-border text-[11px] font-mono">
           <button
             onClick={() => setMetric("cost")}
-            className={`px-3 py-1 rounded transition-colors ${
-              metric === "cost" ? "bg-neutral-800 text-white font-medium" : "text-muted hover:text-neutral-200"
+            className={`px-3.5 py-1.5 rounded-xl transition-all ${
+              metric === "cost"
+                ? "bg-surface text-lime font-medium border border-lime-border shadow-sm"
+                : "text-muted hover:text-white"
             }`}
           >
-            Objective Cost
+            Cost
           </button>
           <button
             onClick={() => setMetric("hard")}
-            className={`px-3 py-1 rounded transition-colors ${
-              metric === "hard" ? "bg-neutral-800 text-white font-medium" : "text-muted hover:text-neutral-200"
+            className={`px-3.5 py-1.5 rounded-xl transition-all ${
+              metric === "hard"
+                ? "bg-surface text-rose-400 font-medium border border-rose-500/30 shadow-sm"
+                : "text-muted hover:text-white"
             }`}
           >
-            Hard Conflicts
+            Hard Clashes
           </button>
           <button
             onClick={() => setMetric("fitness")}
-            className={`px-3 py-1 rounded transition-colors ${
-              metric === "fitness" ? "bg-neutral-800 text-white font-medium" : "text-muted hover:text-neutral-200"
+            className={`px-3.5 py-1.5 rounded-xl transition-all ${
+              metric === "fitness"
+                ? "bg-surface text-emerald-400 font-medium border border-emerald-500/30 shadow-sm"
+                : "text-muted hover:text-white"
             }`}
           >
             Fitness
@@ -71,70 +85,87 @@ export const ConvergenceChart: React.FC<ConvergenceChartProps> = ({ history }) =
       {/* Chart */}
       <div className="h-64 w-full">
         <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={history} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-            <CartesianGrid stroke="#27272a" strokeDasharray="3 3" vertical={false} />
+          <AreaChart data={history} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+            <defs>
+              <linearGradient id="limeGradient" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#d4f938" stopOpacity={0.25} />
+                <stop offset="100%" stopColor="#d4f938" stopOpacity={0.0} />
+              </linearGradient>
+              <linearGradient id="roseGradient" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#f43f5e" stopOpacity={0.25} />
+                <stop offset="100%" stopColor="#f43f5e" stopOpacity={0.0} />
+              </linearGradient>
+              <linearGradient id="emeraldGradient" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#10b981" stopOpacity={0.25} />
+                <stop offset="100%" stopColor="#10b981" stopOpacity={0.0} />
+              </linearGradient>
+            </defs>
+
+            <CartesianGrid stroke="#1c2129" strokeDasharray="3 3" vertical={false} />
             <XAxis
               dataKey="generation"
-              stroke="#71717a"
+              stroke="#525d6d"
               fontSize={11}
               tickLine={false}
-              axisLine={{ stroke: "#27272a" }}
+              axisLine={{ stroke: "#1f242c" }}
             />
             <YAxis
-              stroke="#71717a"
+              stroke="#525d6d"
               fontSize={11}
               tickLine={false}
-              axisLine={{ stroke: "#27272a" }}
-              domain={metric === "fitness" ? [0, "auto"] : ["auto", "auto"]}
+              axisLine={{ stroke: "#1f242c" }}
             />
             <Tooltip
               contentStyle={{
-                backgroundColor: "#18181b",
-                borderColor: "#27272a",
-                borderRadius: "8px",
+                backgroundColor: "#13161a",
+                borderColor: "#252b36",
+                borderRadius: "14px",
                 fontSize: "12px",
-                color: "#f4f4f5",
-                boxShadow: "none",
+                color: "#f3f4f6",
+                boxShadow: "0 10px 25px rgba(0,0,0,0.5)",
               }}
-              labelStyle={{ color: "#a1a1aa", fontFamily: "monospace" }}
+              labelStyle={{ color: "#848d9a", fontFamily: "monospace" }}
             />
 
             {metric === "cost" && (
-              <Line
+              <Area
                 type="monotone"
                 dataKey="best_cost"
                 name="Best Cost"
-                stroke="#818cf8"
-                strokeWidth={2}
+                stroke={currentMetric.stroke}
+                fill={currentMetric.fill}
+                strokeWidth={2.5}
                 dot={false}
                 isAnimationActive={false}
               />
             )}
 
             {metric === "hard" && (
-              <Line
+              <Area
                 type="monotone"
                 dataKey="hard_violations"
                 name="Hard Conflicts"
-                stroke="#f43f5e"
-                strokeWidth={2}
+                stroke={currentMetric.stroke}
+                fill={currentMetric.fill}
+                strokeWidth={2.5}
                 dot={false}
                 isAnimationActive={false}
               />
             )}
 
             {metric === "fitness" && (
-              <Line
+              <Area
                 type="monotone"
                 dataKey="best_fitness"
-                name="Best Fitness"
-                stroke="#10b981"
-                strokeWidth={2}
+                name="Fitness"
+                stroke={currentMetric.stroke}
+                fill={currentMetric.fill}
+                strokeWidth={2.5}
                 dot={false}
                 isAnimationActive={false}
               />
             )}
-          </LineChart>
+          </AreaChart>
         </ResponsiveContainer>
       </div>
     </div>

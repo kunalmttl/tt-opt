@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { CheckCircle2, AlertTriangle, Clock, Activity, Target } from "lucide-react";
+import { Check, ShieldAlert, Sparkles, TrendingUp } from "lucide-react";
 import { formatNumber } from "@/lib/utils";
 
 interface LiveMetricsCardsProps {
@@ -30,105 +30,137 @@ export const LiveMetricsCards: React.FC<LiveMetricsCardsProps> = ({
   const isFeasible = hardViolations === 0 && generation > 0;
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-      {/* Generation Progress */}
-      <div className="p-5 rounded-xl border border-border bg-surface flex flex-col justify-between">
-        <div className="flex items-center justify-between text-muted text-xs">
-          <span>Generation</span>
-          <Activity className="h-3.5 w-3.5 text-muted" />
-        </div>
-        <div className="mt-3">
-          <div className="text-2xl font-mono font-medium text-white">
-            {generation}
-            <span className="text-xs text-muted font-normal"> / {maxGenerations}</span>
-          </div>
-          <p className="text-[11px] text-muted mt-1">
-            {convergedEarly ? "Early convergence" : isStreaming ? "Evolving population..." : "Ready"}
-          </p>
-        </div>
-      </div>
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+      {/* 1. Solution Status & Hard Conflicts */}
+      <div className="p-7 rounded-3xl border border-surface-border bg-gradient-to-b from-surface to-[#0c0e11] relative overflow-hidden flex flex-col justify-between group hover:border-neutral-700/60 transition-all">
+        {/* Ambient Top Glow */}
+        <div className="absolute top-0 right-0 w-32 h-32 bg-lime/5 rounded-full blur-2xl pointer-events-none" />
 
-      {/* Hard Violations (Feasibility) */}
-      <div className="p-5 rounded-xl border border-border bg-surface flex flex-col justify-between">
-        <div className="flex items-center justify-between text-muted text-xs">
-          <span>Hard Conflicts</span>
-          {isFeasible ? (
-            <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" />
-          ) : (
-            <AlertTriangle className="h-3.5 w-3.5 text-rose-400" />
-          )}
-        </div>
-        <div className="mt-3">
-          <div className="text-2xl font-mono font-medium text-white flex items-center gap-2">
-            {hardViolations}
-            {isFeasible && (
-              <span className="text-[10px] font-sans px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                Feasible
-              </span>
+        <div className="flex items-center justify-between z-10">
+          <span className="text-[11px] font-mono tracking-widest uppercase text-muted">
+            Constraint Feasibility
+          </span>
+          <div className="h-8 w-8 rounded-full bg-surface-raised border border-surface-border flex items-center justify-center">
+            {isFeasible ? (
+              <Check className="h-4 w-4 text-lime" />
+            ) : (
+              <ShieldAlert className="h-4 w-4 text-rose-400" />
             )}
           </div>
-          <p className="text-[11px] text-muted mt-1">
-            {isFeasible ? "No room/faculty clash" : "Clashes to resolve"}
-          </p>
+        </div>
+
+        <div className="mt-8 z-10">
+          <div className="flex items-baseline gap-3">
+            <span className="text-4xl font-light tracking-tight text-white font-mono">
+              {hardViolations}
+            </span>
+            <span className="text-xs text-muted font-mono">conflicts</span>
+          </div>
+
+          <div className="mt-4 flex items-center justify-between text-xs">
+            <span
+              className={`px-2.5 py-1 rounded-full text-[10px] font-mono uppercase tracking-wider ${
+                isFeasible
+                  ? "bg-lime-muted text-lime border border-lime-border"
+                  : "bg-rose-500/10 text-rose-400 border border-rose-500/20"
+              }`}
+            >
+              {isFeasible ? "Optimum Feasible" : "Infeasible Conflicts"}
+            </span>
+            <span className="text-[11px] text-muted font-mono">
+              {isFeasible ? "0 double-bookings" : "Resolving clashes"}
+            </span>
+          </div>
         </div>
       </div>
 
-      {/* Objective Cost */}
-      <div className="p-5 rounded-xl border border-border bg-surface flex flex-col justify-between">
-        <div className="flex items-center justify-between text-muted text-xs">
-          <span>Objective Cost</span>
-          <Target className="h-3.5 w-3.5 text-muted" />
+      {/* 2. Objective Cost */}
+      <div className="p-7 rounded-3xl border border-surface-border bg-gradient-to-b from-surface to-[#0c0e11] relative overflow-hidden flex flex-col justify-between group hover:border-neutral-700/60 transition-all">
+        <div className="flex items-center justify-between z-10">
+          <span className="text-[11px] font-mono tracking-widest uppercase text-muted">
+            Objective Penalty Cost
+          </span>
+          {/* Decorative mini lime sparkline curve inspired by screenshot */}
+          <svg className="w-12 h-6" viewBox="0 0 48 24" fill="none">
+            <path
+              d="M2 20C12 18 20 8 32 10C38 12 42 4 46 2"
+              stroke="#d4f938"
+              strokeWidth="2"
+              strokeLinecap="round"
+            />
+          </svg>
         </div>
-        <div className="mt-3">
-          <div className="text-2xl font-mono font-medium text-white">
-            {formatNumber(bestCost, 1)}
+
+        <div className="mt-8 z-10">
+          <div className="flex items-baseline gap-1">
+            <span className="text-4xl font-light tracking-tight text-white font-mono">
+              {formatNumber(bestCost, 1)}
+            </span>
           </div>
-          <p className="text-[11px] text-muted mt-1">Weighted penalty sum</p>
+
+          <div className="mt-4 flex items-center justify-between text-xs text-muted font-mono">
+            <span>Soft Gap Penalty:</span>
+            <span className="text-neutral-200">{formatNumber(softPenalty, 0)}</span>
+          </div>
         </div>
       </div>
 
-      {/* Fitness */}
-      <div className="p-5 rounded-xl border border-border bg-surface flex flex-col justify-between">
-        <div className="flex items-center justify-between text-muted text-xs">
-          <span>Fitness Score</span>
-          <span className="text-[10px] font-mono text-muted">1/(1+Cost)</span>
-        </div>
-        <div className="mt-3">
-          <div className="text-2xl font-mono font-medium text-white">
-            {bestFitness < 0.0001 && bestFitness > 0
-              ? bestFitness.toExponential(2)
-              : formatNumber(bestFitness, 4)}
+      {/* 3. Generations Evolved */}
+      <div className="p-7 rounded-3xl border border-surface-border bg-gradient-to-b from-surface to-[#0c0e11] relative overflow-hidden flex flex-col justify-between group hover:border-neutral-700/60 transition-all">
+        <div className="flex items-center justify-between z-10">
+          <span className="text-[11px] font-mono tracking-widest uppercase text-muted">
+            Evolution Progress
+          </span>
+          <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-surface-raised border border-surface-border text-[10px] font-mono text-lime">
+            <Sparkles className="h-3 w-3" />
+            <span>{isStreaming ? "Live" : "Idle"}</span>
           </div>
-          <p className="text-[11px] text-muted mt-1">Higher is better</p>
+        </div>
+
+        <div className="mt-8 z-10">
+          <div className="flex items-baseline gap-2">
+            <span className="text-4xl font-light tracking-tight text-white font-mono">
+              {generation}
+            </span>
+            <span className="text-xs text-muted font-mono">/ {maxGenerations} gens</span>
+          </div>
+
+          {/* Segmented Neon Progress Bar inspired by screenshot */}
+          <div className="mt-4 w-full h-1.5 bg-[#1a1f26] rounded-full overflow-hidden flex">
+            <div
+              className="bg-lime h-full rounded-full transition-all duration-300 shadow-[0_0_8px_rgba(212,249,56,0.6)]"
+              style={{
+                width: `${Math.min(100, (generation / Math.max(1, maxGenerations)) * 100)}%`,
+              }}
+            />
+          </div>
         </div>
       </div>
 
-      {/* Soft Penalty */}
-      <div className="p-5 rounded-xl border border-border bg-surface flex flex-col justify-between">
-        <div className="flex items-center justify-between text-muted text-xs">
-          <span>Soft Cost</span>
-          <span className="text-[10px] text-muted">Gaps & Load</span>
-        </div>
-        <div className="mt-3">
-          <div className="text-2xl font-mono font-medium text-white">
-            {formatNumber(softPenalty, 0)}
+      {/* 4. Fitness & Execution Time */}
+      <div className="p-7 rounded-3xl border border-surface-border bg-gradient-to-b from-surface to-[#0c0e11] relative overflow-hidden flex flex-col justify-between group hover:border-neutral-700/60 transition-all">
+        <div className="flex items-center justify-between z-10">
+          <span className="text-[11px] font-mono tracking-widest uppercase text-muted">
+            Fitness & Speed
+          </span>
+          <div className="h-8 w-8 rounded-full bg-surface-raised border border-surface-border flex items-center justify-center text-muted">
+            <TrendingUp className="h-4 w-4" />
           </div>
-          <p className="text-[11px] text-muted mt-1">Schedule quality penalty</p>
         </div>
-      </div>
 
-      {/* Runtime */}
-      <div className="p-5 rounded-xl border border-border bg-surface flex flex-col justify-between">
-        <div className="flex items-center justify-between text-muted text-xs">
-          <span>Elapsed Time</span>
-          <Clock className="h-3.5 w-3.5 text-muted" />
-        </div>
-        <div className="mt-3">
-          <div className="text-2xl font-mono font-medium text-white">
-            {formatNumber(executionTime, 2)}
-            <span className="text-xs text-muted font-normal">s</span>
+        <div className="mt-8 z-10">
+          <div className="flex items-baseline gap-2">
+            <span className="text-4xl font-light tracking-tight text-white font-mono">
+              {bestFitness < 0.0001 && bestFitness > 0
+                ? bestFitness.toExponential(2)
+                : formatNumber(bestFitness, 4)}
+            </span>
           </div>
-          <p className="text-[11px] text-muted mt-1">Execution duration</p>
+
+          <div className="mt-4 flex items-center justify-between text-xs text-muted font-mono">
+            <span>Duration:</span>
+            <span className="text-white">{formatNumber(executionTime, 2)}s</span>
+          </div>
         </div>
       </div>
     </div>
