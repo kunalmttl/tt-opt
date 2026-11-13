@@ -21,10 +21,10 @@ interface BenchmarkViewProps {
 }
 
 const ALGO_COLORS: Record<string, string> = {
-  ga: "#d4f938", // Lime
-  simulated_annealing: "#60a5fa", // Soft Blue
-  greedy: "#f59e0b", // Amber
-  random_search: "#f43f5e", // Rose
+  ga: "#ee6c65", // Coral Red
+  simulated_annealing: "#3d4740", // Forest Slate
+  greedy: "#c9b020", // Warm Gold
+  random_search: "#838d85", // Muted Gray-Green
 };
 
 export const BenchmarkView: React.FC<BenchmarkViewProps> = ({ dataset }) => {
@@ -73,24 +73,24 @@ export const BenchmarkView: React.FC<BenchmarkViewProps> = ({ dataset }) => {
   return (
     <div className="flex flex-col gap-8 max-w-7xl mx-auto py-2">
       {/* Intro Banner */}
-      <div className="p-8 rounded-3xl border border-surface-border bg-gradient-to-b from-surface to-[#0c0e11] flex flex-col md:flex-row items-start md:items-center justify-between gap-6 shadow-sm">
+      <div className="p-8 rounded-3xl border border-border bg-surface-raised flex flex-col md:flex-row items-start md:items-center justify-between gap-6 shadow-sm">
         <div className="max-w-2xl">
           <div className="flex items-center gap-2 text-xs font-mono text-muted mb-2">
-            <Info className="h-3.5 w-3.5 text-lime" />
+            <Info className="h-3.5 w-3.5 text-forest" />
             <span className="uppercase tracking-wider">Optimization Techniques • Benchmarking</span>
           </div>
-          <h2 className="text-xl font-medium text-white tracking-tight">
+          <h2 className="text-xl font-semibold text-text-primary tracking-tight">
             Algorithm Comparative Analysis
           </h2>
-          <p className="text-xs text-muted mt-2 leading-relaxed font-sans">
+          <p className="text-xs text-text-secondary mt-2 leading-relaxed font-sans">
             Directly benchmark the <strong>Constraint-Aware Genetic Algorithm (GA)</strong> against classical
             optimization baselines: <strong>Simulated Annealing (SA)</strong>, <strong>Greedy Heuristic</strong>,
-            and <strong>Random Search</strong> under identical problem constraints and evaluation weights.
+            and <strong>Random Search</strong> under identical college schedule constraints.
           </p>
         </div>
 
         {/* Parameters & Action */}
-        <div className="flex flex-col sm:flex-row items-center gap-4 bg-surface-raised p-4 rounded-2xl border border-surface-border">
+        <div className="flex flex-col sm:flex-row items-center gap-4 bg-surface p-4 rounded-2xl border border-border">
           <div className="flex flex-col gap-1">
             <span className="text-[10px] font-mono text-muted uppercase">Iterations</span>
             <input
@@ -100,7 +100,7 @@ export const BenchmarkView: React.FC<BenchmarkViewProps> = ({ dataset }) => {
               value={iterations}
               disabled={isRunning}
               onChange={(e) => setIterations(Number(e.target.value))}
-              className="w-24 px-3 py-1.5 bg-surface border border-surface-border text-white text-xs rounded-xl font-mono focus:outline-none"
+              className="w-24 px-3 py-1.5 bg-surface-raised border border-border text-text-primary text-xs rounded-xl font-mono focus:outline-none"
             />
           </div>
 
@@ -113,23 +113,23 @@ export const BenchmarkView: React.FC<BenchmarkViewProps> = ({ dataset }) => {
               value={populationSize}
               disabled={isRunning}
               onChange={(e) => setPopulationSize(Number(e.target.value))}
-              className="w-24 px-3 py-1.5 bg-surface border border-surface-border text-white text-xs rounded-xl font-mono focus:outline-none"
+              className="w-24 px-3 py-1.5 bg-surface-raised border border-border text-text-primary text-xs rounded-xl font-mono focus:outline-none"
             />
           </div>
 
           <button
             onClick={handleRunBenchmark}
             disabled={isRunning}
-            className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-lime hover:bg-lime-hover text-black font-semibold text-xs transition-all shadow-[0_0_20px_rgba(212,249,56,0.2)] disabled:opacity-50 mt-auto"
+            className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-forest hover:bg-forest-hover text-white font-medium text-xs transition-all shadow-sm disabled:opacity-50 mt-auto"
           >
-            <Play className="h-3.5 w-3.5 fill-black" />
+            <Play className="h-3.5 w-3.5 fill-white" />
             <span>{isRunning ? "Running..." : "Execute Benchmark"}</span>
           </button>
         </div>
       </div>
 
       {error && (
-        <div className="p-5 rounded-2xl border border-rose-500/30 bg-rose-500/10 text-rose-300 text-xs font-mono">
+        <div className="p-5 rounded-2xl border border-coral/30 bg-coral/10 text-coral-dark text-xs font-mono">
           {error}
         </div>
       )}
@@ -137,19 +137,19 @@ export const BenchmarkView: React.FC<BenchmarkViewProps> = ({ dataset }) => {
       {/* Results */}
       {benchmarkData && (
         <>
-          {/* Winner Callout */}
-          <div className="p-7 rounded-3xl border border-lime-border bg-gradient-to-r from-[#172013] to-surface flex items-start gap-4 shadow-sm">
-            <div className="p-3 rounded-2xl bg-surface border border-lime-border text-lime">
-              <Trophy className="h-5 w-5" />
+          {/* Winner Callout (Canary Yellow style from reference) */}
+          <div className="p-7 rounded-3xl bg-canary border border-black/5 text-text-primary flex items-start gap-4 shadow-sm">
+            <div className="p-3 rounded-2xl bg-white/70 text-text-primary shadow-xs">
+              <Trophy className="h-5 w-5 text-coral" />
             </div>
             <div>
-              <span className="text-[10px] font-mono uppercase tracking-widest text-lime">
+              <span className="text-[10px] font-mono uppercase tracking-widest font-bold text-text-primary/70">
                 Course Benchmark Conclusion
               </span>
-              <h3 className="text-base font-medium text-white mt-1">
+              <h3 className="text-base font-semibold text-text-primary mt-1">
                 {benchmarkData.summary}
               </h3>
-              <p className="text-xs text-muted mt-1.5 leading-relaxed font-sans">
+              <p className="text-xs text-text-primary/80 mt-1.5 leading-relaxed font-sans">
                 Notice how population-based recombination (crossover + mutation with constraint repair) enables
                 the Genetic Algorithm to explore discrete scheduling topology without getting trapped in local
                 minima, unlike single-solution heuristics.
@@ -165,20 +165,20 @@ export const BenchmarkView: React.FC<BenchmarkViewProps> = ({ dataset }) => {
               return (
                 <div
                   key={res.algorithm_key}
-                  className={`p-7 rounded-3xl border bg-gradient-to-b from-surface to-[#0c0e11] flex flex-col justify-between transition-all ${
+                  className={`p-7 rounded-3xl border bg-surface-raised flex flex-col justify-between transition-all shadow-sm ${
                     isWinner
-                      ? "border-lime-border ring-1 ring-lime/20 shadow-[0_0_20px_rgba(212,249,56,0.1)]"
-                      : "border-surface-border"
+                      ? "ring-2 ring-forest border-forest"
+                      : "border-border"
                   }`}
                 >
                   <div>
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: color }} />
-                        <span className="font-medium text-white text-xs font-mono">{res.algorithm_name}</span>
+                        <span className="h-3 w-3 rounded-full" style={{ backgroundColor: color }} />
+                        <span className="font-semibold text-text-primary text-xs font-mono">{res.algorithm_name}</span>
                       </div>
                       {isWinner && (
-                        <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-lime-muted text-lime border border-lime-border">
+                        <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-canary text-text-primary font-bold border border-black/10">
                           Winner
                         </span>
                       )}
@@ -187,24 +187,24 @@ export const BenchmarkView: React.FC<BenchmarkViewProps> = ({ dataset }) => {
                     <div className="mt-6 space-y-4">
                       <div>
                         <span className="text-[10px] font-mono text-muted uppercase">Final Objective Cost</span>
-                        <div className="text-3xl font-light font-mono text-white mt-1">
+                        <div className="text-3xl font-light font-mono text-text-primary mt-1">
                           {formatNumber(res.final_cost, 1)}
                         </div>
                       </div>
 
-                      <div className="grid grid-cols-2 gap-3 pt-3 border-t border-surface-border">
+                      <div className="grid grid-cols-2 gap-3 pt-3 border-t border-border">
                         <div>
                           <span className="text-[10px] font-mono text-muted uppercase">Conflicts</span>
-                          <div className="text-sm font-mono text-white flex items-center gap-1.5 mt-0.5">
+                          <div className="text-sm font-mono text-text-primary flex items-center gap-1.5 mt-0.5">
                             {res.hard_violations === 0 ? (
                               <>
-                                <CheckCircle2 className="h-3.5 w-3.5 text-lime" />
-                                <span className="text-lime">0</span>
+                                <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />
+                                <span className="text-emerald-700 font-semibold">0</span>
                               </>
                             ) : (
                               <>
-                                <AlertTriangle className="h-3.5 w-3.5 text-rose-400" />
-                                <span className="text-rose-400">{res.hard_violations}</span>
+                                <AlertTriangle className="h-3.5 w-3.5 text-coral" />
+                                <span className="text-coral font-semibold">{res.hard_violations}</span>
                               </>
                             )}
                           </div>
@@ -212,7 +212,7 @@ export const BenchmarkView: React.FC<BenchmarkViewProps> = ({ dataset }) => {
 
                         <div>
                           <span className="text-[10px] font-mono text-muted uppercase">Runtime</span>
-                          <div className="text-sm font-mono text-neutral-300 mt-0.5">
+                          <div className="text-sm font-mono text-text-secondary mt-0.5">
                             {formatNumber(res.execution_time_seconds, 2)}s
                           </div>
                         </div>
@@ -220,9 +220,9 @@ export const BenchmarkView: React.FC<BenchmarkViewProps> = ({ dataset }) => {
                     </div>
                   </div>
 
-                  <div className="mt-6 pt-4 border-t border-surface-border text-[11px] text-muted flex items-center justify-between font-mono">
+                  <div className="mt-6 pt-4 border-t border-border text-[11px] text-muted flex items-center justify-between font-mono">
                     <span>Soft Gaps: {res.soft_violations}</span>
-                    <span className={res.converged_zero_hard ? "text-lime" : "text-rose-400"}>
+                    <span className={res.converged_zero_hard ? "text-emerald-700 font-semibold" : "text-coral font-semibold"}>
                       {res.converged_zero_hard ? "Feasible" : "Infeasible"}
                     </span>
                   </div>
@@ -232,12 +232,12 @@ export const BenchmarkView: React.FC<BenchmarkViewProps> = ({ dataset }) => {
           </div>
 
           {/* Convergence Overlay Chart */}
-          <div className="p-8 rounded-3xl border border-surface-border bg-gradient-to-b from-surface to-[#0c0e11] flex flex-col gap-6 shadow-sm">
+          <div className="p-8 rounded-3xl border border-border bg-surface-raised flex flex-col gap-6 shadow-sm">
             <div>
               <span className="text-[11px] font-mono tracking-widest uppercase text-muted">
                 Convergence Trajectory
               </span>
-              <h3 className="text-base font-semibold text-white tracking-tight mt-0.5">
+              <h3 className="text-base font-semibold text-text-primary tracking-tight mt-0.5">
                 Multi-Algorithm Convergence Curve
               </h3>
             </div>
@@ -245,29 +245,30 @@ export const BenchmarkView: React.FC<BenchmarkViewProps> = ({ dataset }) => {
             <div className="h-80 w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={chartData} margin={{ top: 10, right: 20, left: -10, bottom: 0 }}>
-                  <CartesianGrid stroke="#1c2129" strokeDasharray="3 3" vertical={false} />
+                  <CartesianGrid stroke="#e4e7df" strokeDasharray="3 3" vertical={false} />
                   <XAxis
                     dataKey="iteration"
-                    stroke="#525d6d"
+                    stroke="#838d85"
                     fontSize={11}
                     tickLine={false}
-                    axisLine={{ stroke: "#1f242c" }}
+                    axisLine={{ stroke: "#d8dcd3" }}
                   />
                   <YAxis
-                    stroke="#525d6d"
+                    stroke="#838d85"
                     fontSize={11}
                     tickLine={false}
-                    axisLine={{ stroke: "#1f242c" }}
+                    axisLine={{ stroke: "#d8dcd3" }}
                   />
                   <Tooltip
                     contentStyle={{
-                      backgroundColor: "#13161a",
-                      borderColor: "#252b36",
+                      backgroundColor: "#ffffff",
+                      borderColor: "#d8dcd3",
                       borderRadius: "14px",
                       fontSize: "12px",
-                      color: "#f3f4f6",
+                      color: "#1c221e",
+                      boxShadow: "0 4px 15px rgba(0,0,0,0.08)",
                     }}
-                    labelStyle={{ color: "#848d9a", fontFamily: "monospace" }}
+                    labelStyle={{ color: "#6f7871", fontFamily: "monospace" }}
                   />
                   <Legend wrapperStyle={{ fontSize: "12px", paddingTop: "14px" }} />
 
@@ -275,7 +276,7 @@ export const BenchmarkView: React.FC<BenchmarkViewProps> = ({ dataset }) => {
                     type="monotone"
                     dataKey="ga"
                     name="Genetic Algorithm (GA)"
-                    stroke="#d4f938"
+                    stroke="#ee6c65"
                     strokeWidth={2.5}
                     dot={false}
                   />
@@ -283,7 +284,7 @@ export const BenchmarkView: React.FC<BenchmarkViewProps> = ({ dataset }) => {
                     type="monotone"
                     dataKey="simulated_annealing"
                     name="Simulated Annealing (SA)"
-                    stroke="#60a5fa"
+                    stroke="#3d4740"
                     strokeWidth={2}
                     dot={false}
                   />
@@ -291,7 +292,7 @@ export const BenchmarkView: React.FC<BenchmarkViewProps> = ({ dataset }) => {
                     type="monotone"
                     dataKey="greedy"
                     name="Greedy Heuristic"
-                    stroke="#f59e0b"
+                    stroke="#c9b020"
                     strokeWidth={2}
                     dot={false}
                   />
@@ -299,7 +300,7 @@ export const BenchmarkView: React.FC<BenchmarkViewProps> = ({ dataset }) => {
                     type="monotone"
                     dataKey="random_search"
                     name="Random Search (Baseline)"
-                    stroke="#f43f5e"
+                    stroke="#838d85"
                     strokeWidth={1.5}
                     strokeDasharray="4 4"
                     dot={false}

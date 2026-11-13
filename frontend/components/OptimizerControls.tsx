@@ -33,32 +33,32 @@ export const OptimizerControls: React.FC<OptimizerControlsProps> = ({
   const [showAdvanced, setShowAdvanced] = useState(false);
 
   return (
-    <div className="p-8 rounded-3xl border border-surface-border bg-gradient-to-b from-surface to-[#0c0e11] flex flex-col gap-8 shadow-sm">
+    <div className="p-8 rounded-3xl border border-border bg-surface-raised flex flex-col gap-8 shadow-sm">
       {/* Top Playback Actions */}
       <div className="flex flex-wrap items-center justify-between gap-5">
-        <div className="flex items-center gap-3.5">
+        <div className="flex items-center gap-3">
           {!isStreaming ? (
             <button
               onClick={onStart}
-              className="flex items-center gap-2.5 px-6 py-3 rounded-2xl bg-lime hover:bg-lime-hover text-black font-semibold text-xs transition-all shadow-[0_0_20px_rgba(212,249,56,0.25)] hover:shadow-[0_0_25px_rgba(212,249,56,0.4)]"
+              className="flex items-center gap-2.5 px-6 py-3 rounded-2xl bg-forest hover:bg-forest-hover text-white font-medium text-xs transition-all shadow-sm"
             >
-              <Play className="h-3.5 w-3.5 fill-black" />
+              <Play className="h-3.5 w-3.5 fill-white" />
               <span>Start GA Evolution</span>
             </button>
           ) : isPaused ? (
             <button
               onClick={onResume}
-              className="flex items-center gap-2.5 px-6 py-3 rounded-2xl bg-lime hover:bg-lime-hover text-black font-semibold text-xs transition-all shadow-[0_0_20px_rgba(212,249,56,0.25)]"
+              className="flex items-center gap-2.5 px-6 py-3 rounded-2xl bg-forest hover:bg-forest-hover text-white font-medium text-xs transition-all shadow-sm"
             >
-              <Play className="h-3.5 w-3.5 fill-black" />
+              <Play className="h-3.5 w-3.5 fill-white" />
               <span>Resume Evolution</span>
             </button>
           ) : (
             <button
               onClick={onPause}
-              className="flex items-center gap-2.5 px-6 py-3 rounded-2xl bg-surface-raised border border-surface-border text-white font-medium text-xs hover:bg-[#1f242c] transition-all"
+              className="flex items-center gap-2.5 px-6 py-3 rounded-2xl bg-canary text-text-primary font-medium text-xs hover:bg-canary-hover transition-all shadow-sm border border-black/5"
             >
-              <Pause className="h-3.5 w-3.5 fill-white" />
+              <Pause className="h-3.5 w-3.5 fill-text-primary" />
               <span>Pause</span>
             </button>
           )}
@@ -66,7 +66,7 @@ export const OptimizerControls: React.FC<OptimizerControlsProps> = ({
           <button
             onClick={onReset}
             disabled={!isStreaming && !isPaused}
-            className="flex items-center gap-2 px-4 py-3 rounded-2xl border border-surface-border text-muted hover:text-white hover:bg-surface-raised text-xs font-medium transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+            className="flex items-center gap-2 px-4 py-3 rounded-2xl border border-border text-text-secondary hover:text-text-primary hover:bg-surface text-xs font-medium transition-all disabled:opacity-40 disabled:cursor-not-allowed"
           >
             <RotateCcw className="h-3.5 w-3.5" />
             <span>Reset</span>
@@ -76,7 +76,7 @@ export const OptimizerControls: React.FC<OptimizerControlsProps> = ({
         {/* Speed Multiplier Pills */}
         <div className="flex items-center gap-3">
           <span className="text-xs text-muted font-mono uppercase tracking-wider">Speed:</span>
-          <div className="flex items-center gap-1 p-1 rounded-2xl bg-surface-raised border border-surface-border font-mono text-[11px]">
+          <div className="flex items-center gap-1 p-1 rounded-2xl bg-surface border border-border font-mono text-[11px]">
             {[
               { label: "1x", val: 1 },
               { label: "2x", val: 2 },
@@ -89,8 +89,8 @@ export const OptimizerControls: React.FC<OptimizerControlsProps> = ({
                 className={cn(
                   "px-3 py-1.5 rounded-xl transition-all",
                   speed === s.val
-                    ? "bg-surface text-lime font-medium border border-lime-border shadow-sm"
-                    : "text-muted hover:text-neutral-200"
+                    ? "bg-forest text-white font-medium shadow-sm"
+                    : "text-text-secondary hover:text-text-primary"
                 )}
               >
                 {s.label}
@@ -101,14 +101,14 @@ export const OptimizerControls: React.FC<OptimizerControlsProps> = ({
       </div>
 
       {/* Main Optimization Sliders */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 pt-6 border-t border-surface-border">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 pt-6 border-t border-border">
         {/* Population Size */}
-        <div className="p-4 rounded-2xl bg-surface-raised/40 border border-surface-border flex flex-col gap-2.5">
+        <div className="p-4 rounded-2xl bg-surface border border-border flex flex-col gap-2.5">
           <div className="flex justify-between items-center text-xs">
             <span className="text-muted font-mono uppercase tracking-wider text-[10px]">
               Population Size
             </span>
-            <span className="font-mono text-white font-medium text-xs px-2 py-0.5 rounded bg-surface border border-surface-border">
+            <span className="font-mono text-text-primary font-medium text-xs px-2 py-0.5 rounded bg-surface-raised border border-border">
               {config.population_size}
             </span>
           </div>
@@ -127,12 +127,12 @@ export const OptimizerControls: React.FC<OptimizerControlsProps> = ({
         </div>
 
         {/* Max Generations */}
-        <div className="p-4 rounded-2xl bg-surface-raised/40 border border-surface-border flex flex-col gap-2.5">
+        <div className="p-4 rounded-2xl bg-surface border border-border flex flex-col gap-2.5">
           <div className="flex justify-between items-center text-xs">
             <span className="text-muted font-mono uppercase tracking-wider text-[10px]">
               Generations
             </span>
-            <span className="font-mono text-white font-medium text-xs px-2 py-0.5 rounded bg-surface border border-surface-border">
+            <span className="font-mono text-text-primary font-medium text-xs px-2 py-0.5 rounded bg-surface-raised border border-border">
               {config.generations}
             </span>
           </div>
@@ -151,12 +151,12 @@ export const OptimizerControls: React.FC<OptimizerControlsProps> = ({
         </div>
 
         {/* Mutation Rate */}
-        <div className="p-4 rounded-2xl bg-surface-raised/40 border border-surface-border flex flex-col gap-2.5">
+        <div className="p-4 rounded-2xl bg-surface border border-border flex flex-col gap-2.5">
           <div className="flex justify-between items-center text-xs">
             <span className="text-muted font-mono uppercase tracking-wider text-[10px]">
               Mutation Rate
             </span>
-            <span className="font-mono text-lime font-medium text-xs px-2 py-0.5 rounded bg-surface border border-lime-border">
+            <span className="font-mono text-coral font-semibold text-xs px-2 py-0.5 rounded bg-coral/10 border border-coral/30">
               {(config.mutation_rate * 100).toFixed(0)}%
             </span>
           </div>
@@ -175,12 +175,12 @@ export const OptimizerControls: React.FC<OptimizerControlsProps> = ({
         </div>
 
         {/* Crossover Rate */}
-        <div className="p-4 rounded-2xl bg-surface-raised/40 border border-surface-border flex flex-col gap-2.5">
+        <div className="p-4 rounded-2xl bg-surface border border-border flex flex-col gap-2.5">
           <div className="flex justify-between items-center text-xs">
             <span className="text-muted font-mono uppercase tracking-wider text-[10px]">
               Crossover Rate
             </span>
-            <span className="font-mono text-white font-medium text-xs px-2 py-0.5 rounded bg-surface border border-surface-border">
+            <span className="font-mono text-text-primary font-medium text-xs px-2 py-0.5 rounded bg-surface-raised border border-border">
               {(config.crossover_rate * 100).toFixed(0)}%
             </span>
           </div>
@@ -203,9 +203,9 @@ export const OptimizerControls: React.FC<OptimizerControlsProps> = ({
       <div>
         <button
           onClick={() => setShowAdvanced(!showAdvanced)}
-          className="flex items-center gap-2 text-xs font-mono text-muted hover:text-white transition-colors"
+          className="flex items-center gap-2 text-xs font-mono text-text-secondary hover:text-text-primary transition-colors"
         >
-          <Sliders className="h-3.5 w-3.5 text-lime" />
+          <Sliders className="h-3.5 w-3.5 text-forest" />
           <span>Advanced Heuristics (Stagnation & Local Search)</span>
           {showAdvanced ? (
             <ChevronUp className="h-3.5 w-3.5 ml-1" />
@@ -215,8 +215,8 @@ export const OptimizerControls: React.FC<OptimizerControlsProps> = ({
         </button>
 
         {showAdvanced && (
-          <div className="mt-5 pt-5 border-t border-surface-border grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
-            <label className="flex items-center gap-3 p-3.5 rounded-2xl bg-surface-raised border border-surface-border text-neutral-300 cursor-pointer hover:border-neutral-700 transition-all">
+          <div className="mt-5 pt-5 border-t border-border grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+            <label className="flex items-center gap-3 p-3.5 rounded-2xl bg-surface border border-border text-text-secondary cursor-pointer hover:border-muted transition-all">
               <input
                 type="checkbox"
                 checked={config.adaptive_mutation || false}
@@ -224,12 +224,12 @@ export const OptimizerControls: React.FC<OptimizerControlsProps> = ({
                 onChange={(e) =>
                   setConfig({ ...config, adaptive_mutation: e.target.checked })
                 }
-                className="w-4 h-4 rounded accent-lime bg-surface border-surface-border"
+                className="w-4 h-4 rounded accent-forest bg-surface-raised border-border"
               />
               <span className="text-xs">Adaptive Mutation (Ramps on stagnation)</span>
             </label>
 
-            <label className="flex items-center gap-3 p-3.5 rounded-2xl bg-surface-raised border border-surface-border text-neutral-300 cursor-pointer hover:border-neutral-700 transition-all">
+            <label className="flex items-center gap-3 p-3.5 rounded-2xl bg-surface border border-border text-text-secondary cursor-pointer hover:border-muted transition-all">
               <input
                 type="checkbox"
                 checked={config.diversity_injection || false}
@@ -237,12 +237,12 @@ export const OptimizerControls: React.FC<OptimizerControlsProps> = ({
                 onChange={(e) =>
                   setConfig({ ...config, diversity_injection: e.target.checked })
                 }
-                className="w-4 h-4 rounded accent-lime bg-surface border-surface-border"
+                className="w-4 h-4 rounded accent-forest bg-surface-raised border-border"
               />
               <span className="text-xs">Diversity Injection (Replaces worst)</span>
             </label>
 
-            <label className="flex items-center gap-3 p-3.5 rounded-2xl bg-surface-raised border border-surface-border text-neutral-300 cursor-pointer hover:border-neutral-700 transition-all">
+            <label className="flex items-center gap-3 p-3.5 rounded-2xl bg-surface border border-border text-text-secondary cursor-pointer hover:border-muted transition-all">
               <input
                 type="checkbox"
                 checked={config.local_search_enabled || false}
@@ -250,7 +250,7 @@ export const OptimizerControls: React.FC<OptimizerControlsProps> = ({
                 onChange={(e) =>
                   setConfig({ ...config, local_search_enabled: e.target.checked })
                 }
-                className="w-4 h-4 rounded accent-lime bg-surface border-surface-border"
+                className="w-4 h-4 rounded accent-forest bg-surface-raised border-border"
               />
               <span className="text-xs">Memetic Local Search (Hill-climbing)</span>
             </label>

@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Zap, BarChart2, Eye, Database } from "lucide-react";
+import { BarChart2, Eye, Database, Activity } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface NavbarProps {
@@ -20,48 +20,48 @@ export const Navbar: React.FC<NavbarProps> = ({
   selectedScenarioName,
 }) => {
   return (
-    <header className="border-b border-surface-border bg-background/90 backdrop-blur-md sticky top-0 z-40 px-6 md:px-10 py-4">
+    <header className="border-b border-border bg-surface/80 backdrop-blur-md sticky top-0 z-40 px-6 md:px-10 py-3.5">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         {/* Brand */}
         <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-2xl bg-gradient-to-br from-[#1c2414] to-[#0f140f] border border-lime/30 flex items-center justify-center text-lime shadow-[0_0_22px_rgba(212,249,56,0.2)]">
+          <div className="h-9 w-9 rounded-xl bg-coral flex items-center justify-center text-white shadow-sm">
             <svg
               className="w-5 h-5"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
-              strokeWidth="1.8"
+              strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
             >
-              <rect x="3" y="3" width="7" height="7" rx="2" className="fill-lime/30 stroke-lime" />
-              <rect x="14" y="3" width="7" height="7" rx="2" className="stroke-lime/60" />
-              <rect x="3" y="14" width="7" height="7" rx="2" className="stroke-lime/60" />
-              <rect x="14" y="14" width="7" height="7" rx="2" className="fill-lime stroke-lime" />
+              <rect x="3" y="3" width="7" height="7" rx="1.5" className="fill-white/20" />
+              <rect x="14" y="3" width="7" height="7" rx="1.5" />
+              <rect x="3" y="14" width="7" height="7" rx="1.5" />
+              <rect x="14" y="14" width="7" height="7" rx="1.5" className="fill-white" />
             </svg>
           </div>
-          <span className="text-lg font-semibold tracking-tight text-white">
-            ChronoGrid
-          </span>
+          <div className="flex items-baseline gap-2">
+            <span className="text-base font-semibold tracking-tight text-text-primary">
+              ChronoGrid
+            </span>
+            <span className="text-[11px] font-mono text-muted">
+              • {selectedScenarioName}
+            </span>
+          </div>
         </div>
 
         {/* View Switcher Pills */}
-        <div className="flex items-center gap-1 p-1 bg-surface border border-surface-border rounded-2xl">
+        <div className="flex items-center gap-1.5 p-1 bg-surface-raised border border-border rounded-2xl shadow-sm">
           <button
             onClick={() => setActiveTab("optimizer")}
             className={cn(
               "flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-medium transition-all",
               activeTab === "optimizer"
-                ? "bg-surface-raised text-white border border-surface-border shadow-sm"
-                : "text-muted hover:text-neutral-200"
+                ? "bg-forest text-white shadow-sm"
+                : "text-text-secondary hover:text-text-primary hover:bg-black/5"
             )}
           >
-            <span
-              className={cn(
-                "h-1.5 w-1.5 rounded-full transition-colors",
-                activeTab === "optimizer" ? "bg-lime" : "bg-neutral-600"
-              )}
-            />
+            <Activity className="h-3.5 w-3.5" />
             Live Optimizer
           </button>
 
@@ -70,8 +70,8 @@ export const Navbar: React.FC<NavbarProps> = ({
             className={cn(
               "flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-medium transition-all",
               activeTab === "benchmark"
-                ? "bg-surface-raised text-white border border-surface-border shadow-sm"
-                : "text-muted hover:text-neutral-200"
+                ? "bg-forest text-white shadow-sm"
+                : "text-text-secondary hover:text-text-primary hover:bg-black/5"
             )}
           >
             <BarChart2 className="h-3.5 w-3.5" />
@@ -83,8 +83,8 @@ export const Navbar: React.FC<NavbarProps> = ({
             className={cn(
               "flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-medium transition-all",
               activeTab === "visualizer"
-                ? "bg-surface-raised text-white border border-surface-border shadow-sm"
-                : "text-muted hover:text-neutral-200"
+                ? "bg-forest text-white shadow-sm"
+                : "text-text-secondary hover:text-text-primary hover:bg-black/5"
             )}
           >
             <Eye className="h-3.5 w-3.5" />
@@ -96,22 +96,20 @@ export const Navbar: React.FC<NavbarProps> = ({
         <div className="flex items-center gap-3">
           <button
             onClick={onOpenEditor}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-medium border border-surface-border bg-surface hover:bg-surface-raised text-neutral-300 hover:text-white transition-all"
+            className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-medium border border-border bg-surface-raised hover:bg-white text-text-secondary hover:text-text-primary transition-all shadow-sm"
           >
             <Database className="h-3.5 w-3.5 text-muted" />
             Scenario Editor
           </button>
 
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl text-[11px] font-mono border border-surface-border bg-surface">
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl text-[11px] font-mono border border-border bg-surface-raised shadow-sm">
             <span
               className={cn(
                 "h-2 w-2 rounded-full",
-                isBackendConnected
-                  ? "bg-lime shadow-[0_0_8px_rgba(212,249,56,0.6)]"
-                  : "bg-rose-500 animate-pulse"
+                isBackendConnected ? "bg-emerald-500" : "bg-coral animate-pulse"
               )}
             />
-            <span className="text-muted">
+            <span className="text-text-secondary">
               {isBackendConnected ? "Connected" : "Offline"}
             </span>
           </div>

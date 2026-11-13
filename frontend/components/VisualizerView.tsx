@@ -46,15 +46,15 @@ export const VisualizerView: React.FC<VisualizerViewProps> = ({ dataset }) => {
   return (
     <div className="flex flex-col gap-8 max-w-7xl mx-auto py-2">
       {/* Top Banner */}
-      <div className="p-8 rounded-3xl border border-surface-border bg-gradient-to-b from-surface to-[#0c0e11] flex flex-col md:flex-row items-start md:items-center justify-between gap-6 shadow-sm">
+      <div className="p-8 rounded-3xl border border-border bg-surface-raised flex flex-col md:flex-row items-start md:items-center justify-between gap-6 shadow-sm">
         <div>
-          <span className="text-[10px] font-mono text-lime uppercase tracking-widest">
+          <span className="text-[10px] font-mono text-coral font-bold uppercase tracking-widest">
             Viva Presentation Explainer
           </span>
-          <h2 className="text-xl font-medium text-white tracking-tight mt-1">
+          <h2 className="text-xl font-semibold text-text-primary tracking-tight mt-1">
             Genetic Operator Step-by-Step Visualizer
           </h2>
-          <p className="text-xs text-muted mt-2 max-w-2xl leading-relaxed font-sans">
+          <p className="text-xs text-text-secondary mt-2 max-w-2xl leading-relaxed font-sans">
             Walk an evaluator or professor through the exact micro-mechanics of the Genetic Algorithm:
             how parents are selected, how chromosomes exchange genetic material, how mutations introduce diversity,
             and how heuristic repair restores timetable feasibility.
@@ -64,7 +64,7 @@ export const VisualizerView: React.FC<VisualizerViewProps> = ({ dataset }) => {
         <button
           onClick={loadStep}
           disabled={isLoading}
-          className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-lime hover:bg-lime-hover text-black font-semibold text-xs transition-all shadow-[0_0_20px_rgba(212,249,56,0.2)] disabled:opacity-50"
+          className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-forest hover:bg-forest-hover text-white font-medium text-xs transition-all shadow-sm disabled:opacity-50"
         >
           <RefreshCw className={`h-3.5 w-3.5 ${isLoading ? "animate-spin" : ""}`} />
           <span>{isLoading ? "Simulating..." : "Generate New Step"}</span>
@@ -80,22 +80,22 @@ export const VisualizerView: React.FC<VisualizerViewProps> = ({ dataset }) => {
             <button
               key={s.key}
               onClick={() => setActiveStage(s.key as any)}
-              className={`p-5 rounded-2xl border text-left flex items-center gap-3.5 transition-all ${
+              className={`p-5 rounded-2xl border text-left flex items-center gap-3.5 transition-all shadow-sm ${
                 isActive
-                  ? "bg-surface-raised border-lime-border text-white shadow-[0_0_15px_rgba(212,249,56,0.08)]"
-                  : "bg-surface border-surface-border text-muted hover:text-neutral-200"
+                  ? "bg-forest text-white border-forest"
+                  : "bg-surface-raised border-border text-text-secondary hover:text-text-primary"
               }`}
             >
               <div
                 className={`p-2.5 rounded-xl border ${
                   isActive
-                    ? "bg-surface border-lime-border text-lime"
-                    : "bg-surface-raised border-surface-border text-muted"
+                    ? "bg-white/10 border-white/20 text-white"
+                    : "bg-surface border-border text-text-secondary"
                 }`}
               >
                 <Icon className="h-4 w-4" />
               </div>
-              <span className="text-xs font-medium font-mono">{s.label}</span>
+              <span className="text-xs font-semibold font-mono">{s.label}</span>
             </button>
           );
         })}
@@ -103,18 +103,18 @@ export const VisualizerView: React.FC<VisualizerViewProps> = ({ dataset }) => {
 
       {/* Stage Content */}
       {data && (
-        <div className="p-8 rounded-3xl border border-surface-border bg-gradient-to-b from-surface to-[#0c0e11] flex flex-col gap-6 shadow-sm">
+        <div className="p-8 rounded-3xl border border-border bg-surface-raised flex flex-col gap-6 shadow-sm">
           {/* Stage 1: Tournament Selection */}
           {activeStage === "selection" && (
             <div className="flex flex-col gap-6">
-              <div className="border-b border-surface-border pb-4">
-                <span className="text-[10px] font-mono text-lime uppercase tracking-widest">
+              <div className="border-b border-border pb-4">
+                <span className="text-[10px] font-mono text-coral font-bold uppercase tracking-widest">
                   Selection Mechanics
                 </span>
-                <h3 className="text-base font-semibold text-white mt-1">
+                <h3 className="text-base font-semibold text-text-primary mt-1">
                   Tournament Selection (Pool k = {data.selection.candidates.length})
                 </h3>
-                <p className="text-xs text-muted mt-1 leading-relaxed font-sans">
+                <p className="text-xs text-text-secondary mt-1 leading-relaxed font-sans">
                   A random tournament pool of {data.selection.candidates.length} chromosomes is sampled from the population.
                   The candidate with the highest fitness (lowest objective cost) wins and is selected into the mating pool.
                 </p>
@@ -128,8 +128,8 @@ export const VisualizerView: React.FC<VisualizerViewProps> = ({ dataset }) => {
                       key={idx}
                       className={`p-6 rounded-2xl border flex flex-col justify-between transition-all ${
                         isWinner
-                          ? "border-lime-border bg-surface-raised ring-1 ring-lime/20 shadow-[0_0_20px_rgba(212,249,56,0.1)]"
-                          : "border-surface-border bg-surface"
+                          ? "border-forest bg-canary/20 ring-2 ring-forest"
+                          : "border-border bg-surface"
                       }`}
                     >
                       <div>
@@ -138,8 +138,8 @@ export const VisualizerView: React.FC<VisualizerViewProps> = ({ dataset }) => {
                             Candidate #{idx + 1}
                           </span>
                           {isWinner && (
-                            <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-lime-muted text-lime border border-lime-border">
-                              Tournament Winner
+                            <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-canary text-text-primary font-bold border border-black/10">
+                              Selected Winner
                             </span>
                           )}
                         </div>
@@ -147,21 +147,21 @@ export const VisualizerView: React.FC<VisualizerViewProps> = ({ dataset }) => {
                         <div className="space-y-3 font-mono">
                           <div className="flex justify-between text-xs">
                             <span className="text-muted">Objective Cost:</span>
-                            <span className="text-white font-medium">
+                            <span className="text-text-primary font-bold">
                               {formatNumber(cand.cost, 1)}
                             </span>
                           </div>
                           <div className="flex justify-between text-xs">
                             <span className="text-muted">Fitness:</span>
-                            <span className="text-neutral-300">
+                            <span className="text-text-secondary">
                               {formatNumber(cand.fitness, 4)}
                             </span>
                           </div>
                           <div className="flex justify-between text-xs">
                             <span className="text-muted">Hard Violations:</span>
                             <span
-                              className={`font-medium ${
-                                cand.hard_violations === 0 ? "text-lime" : "text-rose-400"
+                              className={`font-semibold ${
+                                cand.hard_violations === 0 ? "text-emerald-700" : "text-coral"
                               }`}
                             >
                               {cand.hard_violations}
@@ -170,7 +170,7 @@ export const VisualizerView: React.FC<VisualizerViewProps> = ({ dataset }) => {
                         </div>
                       </div>
 
-                      <div className="mt-5 pt-3 border-t border-surface-border text-[11px] text-muted font-mono">
+                      <div className="mt-5 pt-3 border-t border-border text-[11px] text-muted font-mono">
                         Gene Count: {cand.genes.length}
                       </div>
                     </div>
@@ -183,14 +183,14 @@ export const VisualizerView: React.FC<VisualizerViewProps> = ({ dataset }) => {
           {/* Stage 2: Two-Point Crossover */}
           {activeStage === "crossover" && (
             <div className="flex flex-col gap-6">
-              <div className="border-b border-surface-border pb-4">
-                <span className="text-[10px] font-mono text-lime uppercase tracking-widest">
+              <div className="border-b border-border pb-4">
+                <span className="text-[10px] font-mono text-coral font-bold uppercase tracking-widest">
                   Genetic Recombination
                 </span>
-                <h3 className="text-base font-semibold text-white mt-1">
+                <h3 className="text-base font-semibold text-text-primary mt-1">
                   Two-Point Crossover (Cut Points: Gene {data.crossover.point_1} to {data.crossover.point_2})
                 </h3>
-                <p className="text-xs text-muted mt-1 leading-relaxed font-sans">
+                <p className="text-xs text-text-secondary mt-1 leading-relaxed font-sans">
                   Parent chromosomes exchange the intermediate genetic segment bounded by cut points p1 and p2.
                   This preserves building blocks of conflict-free class clusters while exploring novel arrangements.
                 </p>
@@ -198,40 +198,40 @@ export const VisualizerView: React.FC<VisualizerViewProps> = ({ dataset }) => {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Parents */}
-                <div className="p-6 rounded-2xl border border-surface-border bg-surface flex flex-col gap-4">
+                <div className="p-6 rounded-2xl border border-border bg-surface flex flex-col gap-4">
                   <span className="text-[10px] font-mono text-muted uppercase tracking-wider">Parents</span>
                   <div className="space-y-3 font-mono">
-                    <div className="p-4 rounded-xl border border-surface-border bg-surface-raised flex justify-between text-xs">
-                      <span className="text-white">Parent A</span>
+                    <div className="p-4 rounded-xl border border-border bg-surface-raised flex justify-between text-xs">
+                      <span className="text-text-primary font-semibold">Parent A</span>
                       <span className="text-muted">Cost: {data.crossover.parent_a.cost}</span>
                     </div>
-                    <div className="p-4 rounded-xl border border-surface-border bg-surface-raised flex justify-between text-xs">
-                      <span className="text-white">Parent B</span>
+                    <div className="p-4 rounded-xl border border-border bg-surface-raised flex justify-between text-xs">
+                      <span className="text-text-primary font-semibold">Parent B</span>
                       <span className="text-muted">Cost: {data.crossover.parent_b.cost}</span>
                     </div>
                   </div>
                 </div>
 
                 {/* Offspring */}
-                <div className="p-6 rounded-2xl border border-surface-border bg-surface flex flex-col gap-4">
+                <div className="p-6 rounded-2xl border border-border bg-surface flex flex-col gap-4">
                   <span className="text-[10px] font-mono text-muted uppercase tracking-wider">Offspring</span>
                   <div className="space-y-3 font-mono">
-                    <div className="p-4 rounded-xl border border-lime-border bg-surface-raised flex flex-col gap-1">
+                    <div className="p-4 rounded-xl border border-coral/40 bg-coral/5 flex flex-col gap-1">
                       <div className="flex justify-between text-xs">
-                        <span className="text-lime font-medium">Child A</span>
+                        <span className="text-coral font-bold">Child A</span>
                         <span className="text-muted">Cost: {data.crossover.child_a.cost}</span>
                       </div>
-                      <p className="text-[10px] text-muted font-sans mt-0.5">
+                      <p className="text-[10px] text-text-secondary font-sans mt-0.5">
                         Inherited Parent B genes in [{data.crossover.point_1}:{data.crossover.point_2}], Parent A elsewhere.
                       </p>
                     </div>
 
-                    <div className="p-4 rounded-xl border border-blue-500/30 bg-surface-raised flex flex-col gap-1">
+                    <div className="p-4 rounded-xl border border-forest/40 bg-forest/5 flex flex-col gap-1">
                       <div className="flex justify-between text-xs">
-                        <span className="text-blue-400 font-medium">Child B</span>
+                        <span className="text-forest font-bold">Child B</span>
                         <span className="text-muted">Cost: {data.crossover.child_b.cost}</span>
                       </div>
-                      <p className="text-[10px] text-muted font-sans mt-0.5">
+                      <p className="text-[10px] text-text-secondary font-sans mt-0.5">
                         Inherited Parent A genes in [{data.crossover.point_1}:{data.crossover.point_2}], Parent B elsewhere.
                       </p>
                     </div>
@@ -244,34 +244,34 @@ export const VisualizerView: React.FC<VisualizerViewProps> = ({ dataset }) => {
           {/* Stage 3: Mutation */}
           {activeStage === "mutation" && (
             <div className="flex flex-col gap-6">
-              <div className="border-b border-surface-border pb-4">
-                <span className="text-[10px] font-mono text-lime uppercase tracking-widest">
+              <div className="border-b border-border pb-4">
+                <span className="text-[10px] font-mono text-coral font-bold uppercase tracking-widest">
                   Diversity Injection
                 </span>
-                <h3 className="text-base font-semibold text-white mt-1">
+                <h3 className="text-base font-semibold text-text-primary mt-1">
                   Gene Mutation ({data.mutation.mutated_gene_indices.length} Genes Mutated)
                 </h3>
-                <p className="text-xs text-muted mt-1 leading-relaxed font-sans">
+                <p className="text-xs text-text-secondary mt-1 leading-relaxed font-sans">
                   With probability p_m, random genes undergo slot mutation (day/period alteration) or room reassignment.
                   This introduces genetic diversity and prevents population entrapment in premature convergence.
                 </p>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="p-6 rounded-2xl border border-surface-border bg-surface flex flex-col gap-3 font-mono">
+                <div className="p-6 rounded-2xl border border-border bg-surface flex flex-col gap-3 font-mono">
                   <div className="flex justify-between items-center text-xs">
                     <span className="text-muted uppercase text-[10px]">Before Mutation</span>
-                    <span className="text-white">Cost: {data.mutation.before.cost}</span>
+                    <span className="text-text-primary font-bold">Cost: {data.mutation.before.cost}</span>
                   </div>
                   <div className="text-xs text-muted">
                     Hard Violations: {data.mutation.before.hard_violations}
                   </div>
                 </div>
 
-                <div className="p-6 rounded-2xl border border-lime-border bg-surface-raised flex flex-col gap-3 font-mono">
+                <div className="p-6 rounded-2xl border border-coral/40 bg-coral/5 flex flex-col gap-3 font-mono">
                   <div className="flex justify-between items-center text-xs">
-                    <span className="text-lime uppercase text-[10px]">After Mutation</span>
-                    <span className="text-white">Cost: {data.mutation.after.cost}</span>
+                    <span className="text-coral font-bold uppercase text-[10px]">After Mutation</span>
+                    <span className="text-text-primary font-bold">Cost: {data.mutation.after.cost}</span>
                   </div>
                   <div className="text-xs text-muted">
                     Hard Violations: {data.mutation.after.hard_violations}
@@ -279,7 +279,7 @@ export const VisualizerView: React.FC<VisualizerViewProps> = ({ dataset }) => {
                 </div>
               </div>
 
-              <div className="p-4 rounded-2xl border border-surface-border bg-surface text-xs font-mono text-muted">
+              <div className="p-4 rounded-2xl border border-border bg-surface text-xs font-mono text-text-secondary">
                 Mutated Gene Positions: [{data.mutation.mutated_gene_indices.join(", ")}]
               </div>
             </div>
@@ -288,39 +288,39 @@ export const VisualizerView: React.FC<VisualizerViewProps> = ({ dataset }) => {
           {/* Stage 4: Constraint Repair */}
           {activeStage === "repair" && (
             <div className="flex flex-col gap-6">
-              <div className="border-b border-surface-border pb-4">
-                <span className="text-[10px] font-mono text-lime uppercase tracking-widest">
+              <div className="border-b border-border pb-4">
+                <span className="text-[10px] font-mono text-coral font-bold uppercase tracking-widest">
                   Heuristic Repair Pass
                 </span>
-                <h3 className="text-base font-semibold text-white mt-1">
+                <h3 className="text-base font-semibold text-text-primary mt-1">
                   Constraint-Aware Repair ({data.repair.conflicts_resolved} Conflicts Resolved)
                 </h3>
-                <p className="text-xs text-muted mt-1 leading-relaxed font-sans">
+                <p className="text-xs text-text-secondary mt-1 leading-relaxed font-sans">
                   Rather than purely penalizing infeasible individuals, the repair operator performs a bounded local
                   repair pass: conflicting genes are systematically moved to vacant slots with zero clashes.
                 </p>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-                <div className="p-6 rounded-2xl border border-surface-border bg-surface flex flex-col justify-between">
+                <div className="p-6 rounded-2xl border border-border bg-surface flex flex-col justify-between">
                   <span className="text-[10px] text-muted font-mono uppercase">Pre-Repair Conflicts</span>
-                  <div className="text-3xl font-light font-mono text-rose-400 mt-2">
+                  <div className="text-3xl font-light font-mono text-coral mt-2">
                     {data.repair.before.hard_violations}
                   </div>
                   <p className="text-[10px] text-muted mt-2 font-mono">Room/Faculty double bookings</p>
                 </div>
 
-                <div className="p-6 rounded-2xl border border-lime-border bg-surface-raised flex flex-col justify-between">
-                  <span className="text-[10px] text-lime font-mono uppercase">Post-Repair Conflicts</span>
-                  <div className="text-3xl font-light font-mono text-lime mt-2">
+                <div className="p-6 rounded-2xl border border-forest bg-forest/5 flex flex-col justify-between">
+                  <span className="text-[10px] text-forest font-mono uppercase font-bold">Post-Repair Conflicts</span>
+                  <div className="text-3xl font-light font-mono text-emerald-700 mt-2">
                     {data.repair.after.hard_violations}
                   </div>
                   <p className="text-[10px] text-muted mt-2 font-mono">Clashes resolved to zero</p>
                 </div>
 
-                <div className="p-6 rounded-2xl border border-surface-border bg-surface flex flex-col justify-between">
+                <div className="p-6 rounded-2xl border border-border bg-surface flex flex-col justify-between">
                   <span className="text-[10px] text-muted font-mono uppercase">Repaired Gene Positions</span>
-                  <div className="text-3xl font-light font-mono text-white mt-2">
+                  <div className="text-3xl font-light font-mono text-text-primary mt-2">
                     {data.repair.repaired_gene_indices.length}
                   </div>
                   <p className="text-[10px] text-muted mt-2 font-mono">Reassigned to vacant slots</p>

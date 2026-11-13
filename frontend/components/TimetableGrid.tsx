@@ -73,33 +73,35 @@ export const TimetableGrid: React.FC<TimetableGridProps> = ({ timetable, dataset
     return (
       <div
         key={`${day}-${period}`}
-        className="p-2 border-r last:border-r-0 border-surface-border min-h-[110px] min-w-0 flex flex-col justify-center gap-1.5 overflow-hidden"
+        className="p-2 border-r last:border-r-0 border-border min-h-[110px] min-w-0 flex flex-col justify-center gap-1.5 overflow-hidden bg-white/40"
       >
         {genes.length === 0 ? (
-          <div className="h-full flex items-center justify-center text-[10px] text-neutral-700 font-mono">
+          <div className="h-full flex items-center justify-center text-[10px] text-muted/60 font-mono">
             —
           </div>
         ) : (
           genes.map((gene, idx) => (
             <div
               key={idx}
-              className="p-2.5 rounded-xl border border-surface-border bg-surface-raised/95 flex flex-col gap-1 text-[11px] min-w-0 overflow-hidden shadow-sm hover:border-lime-border transition-all"
+              className="p-2.5 rounded-xl border border-border bg-white flex flex-col gap-1 text-[11px] min-w-0 overflow-hidden shadow-xs hover:border-forest transition-all"
             >
               <div
-                className="font-medium text-white truncate text-xs leading-tight"
+                className="font-medium text-text-primary truncate text-xs leading-tight"
                 title={gene.subject_name}
               >
                 {gene.subject_name}
               </div>
 
               <div className="flex items-center gap-1 text-muted truncate text-[10px]">
-                <User className="h-3 w-3 shrink-0 text-neutral-400" />
+                <User className="h-3 w-3 shrink-0 text-text-secondary" />
                 <span className="truncate">{gene.faculty_name}</span>
               </div>
 
-              <div className="flex items-center justify-between text-[10px] mt-1 pt-1 border-t border-surface-border/70 min-w-0 gap-1 font-mono">
-                <span className="text-lime truncate">{gene.batch_name}</span>
-                <span className="flex items-center gap-0.5 text-muted shrink-0 whitespace-nowrap">
+              <div className="flex items-center justify-between text-[10px] mt-1 pt-1 border-t border-border/60 min-w-0 gap-1 font-mono">
+                <span className="px-1.5 py-0.5 rounded bg-forest/10 text-forest font-semibold truncate text-[9px]">
+                  {gene.batch_name}
+                </span>
+                <span className="flex items-center gap-0.5 text-muted shrink-0 whitespace-nowrap text-[10px]">
                   <MapPin className="h-2.5 w-2.5" />
                   {gene.room_number}
                 </span>
@@ -112,7 +114,7 @@ export const TimetableGrid: React.FC<TimetableGridProps> = ({ timetable, dataset
   };
 
   return (
-    <div className="p-8 rounded-3xl border border-surface-border bg-gradient-to-b from-surface to-[#0c0e11] flex flex-col gap-6 shadow-sm">
+    <div className="p-8 rounded-3xl border border-border bg-surface-raised flex flex-col gap-6 shadow-sm">
       {/* Header and Filter Controls */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
@@ -120,12 +122,12 @@ export const TimetableGrid: React.FC<TimetableGridProps> = ({ timetable, dataset
             <span className="text-[11px] font-mono tracking-widest uppercase text-muted">
               College Timetable
             </span>
-            <span className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-raised border border-surface-border text-[10px] font-mono text-neutral-300">
-              <Clock className="h-3 w-3 text-lime" />
+            <span className="flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-surface border border-border text-[10px] font-mono text-text-secondary">
+              <Clock className="h-3 w-3 text-forest" />
               8:00 AM – 5:00 PM • Lunch: 1:00 – 2:00 PM
             </span>
           </div>
-          <h2 className="text-base font-semibold text-white tracking-tight mt-0.5">
+          <h2 className="text-base font-semibold text-text-primary tracking-tight mt-0.5">
             Weekly Class Schedule Matrix
           </h2>
           <p className="text-xs text-muted mt-1 font-mono">
@@ -136,16 +138,16 @@ export const TimetableGrid: React.FC<TimetableGridProps> = ({ timetable, dataset
         {/* Filter Pills */}
         <div className="flex flex-wrap items-center gap-2.5">
           {/* Batch Selector */}
-          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-2xl bg-surface-raised border border-surface-border text-xs">
+          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-2xl bg-surface border border-border text-xs">
             <Filter className="h-3 w-3 text-muted" />
             <select
               value={selectedBatch}
               onChange={(e) => setSelectedBatch(e.target.value)}
-              className="bg-transparent text-white font-mono text-xs focus:outline-none cursor-pointer"
+              className="bg-transparent text-text-primary font-mono text-xs focus:outline-none cursor-pointer"
             >
-              <option value="all" className="bg-[#13161a]">All Batches</option>
+              <option value="all">All Batches</option>
               {dataset.batches.map((b) => (
-                <option key={b.batch_id} value={b.batch_id} className="bg-[#13161a]">
+                <option key={b.batch_id} value={b.batch_id}>
                   {b.name}
                 </option>
               ))}
@@ -153,15 +155,15 @@ export const TimetableGrid: React.FC<TimetableGridProps> = ({ timetable, dataset
           </div>
 
           {/* Faculty Selector */}
-          <div className="px-3 py-1.5 rounded-2xl bg-surface-raised border border-surface-border text-xs">
+          <div className="px-3 py-1.5 rounded-2xl bg-surface border border-border text-xs">
             <select
               value={selectedFaculty}
               onChange={(e) => setSelectedFaculty(e.target.value)}
-              className="bg-transparent text-white font-mono text-xs focus:outline-none cursor-pointer"
+              className="bg-transparent text-text-primary font-mono text-xs focus:outline-none cursor-pointer"
             >
-              <option value="all" className="bg-[#13161a]">All Faculty</option>
+              <option value="all">All Faculty</option>
               {dataset.faculty.map((f) => (
-                <option key={f.faculty_id} value={f.faculty_id} className="bg-[#13161a]">
+                <option key={f.faculty_id} value={f.faculty_id}>
                   {f.name}
                 </option>
               ))}
@@ -169,15 +171,15 @@ export const TimetableGrid: React.FC<TimetableGridProps> = ({ timetable, dataset
           </div>
 
           {/* Room Selector */}
-          <div className="px-3 py-1.5 rounded-2xl bg-surface-raised border border-surface-border text-xs">
+          <div className="px-3 py-1.5 rounded-2xl bg-surface border border-border text-xs">
             <select
               value={selectedRoom}
               onChange={(e) => setSelectedRoom(e.target.value)}
-              className="bg-transparent text-white font-mono text-xs focus:outline-none cursor-pointer"
+              className="bg-transparent text-text-primary font-mono text-xs focus:outline-none cursor-pointer"
             >
-              <option value="all" className="bg-[#13161a]">All Rooms</option>
+              <option value="all">All Rooms</option>
               {dataset.rooms.map((r) => (
-                <option key={r.room_id} value={r.room_id} className="bg-[#13161a]">
+                <option key={r.room_id} value={r.room_id}>
                   {r.room_number} ({r.room_type})
                 </option>
               ))}
@@ -188,25 +190,25 @@ export const TimetableGrid: React.FC<TimetableGridProps> = ({ timetable, dataset
           <button
             onClick={handleExportCsv}
             disabled={timetable.length === 0 || isExporting}
-            className="flex items-center gap-2 px-4 py-2 rounded-2xl border border-surface-border text-neutral-300 hover:text-white hover:bg-surface-raised text-xs font-medium transition-all disabled:opacity-30"
+            className="flex items-center gap-2 px-4 py-2 rounded-2xl border border-border text-text-secondary hover:text-text-primary hover:bg-surface text-xs font-medium transition-all disabled:opacity-40 shadow-xs"
           >
-            <Download className="h-3.5 w-3.5 text-lime" />
+            <Download className="h-3.5 w-3.5 text-forest" />
             <span>{isExporting ? "Exporting..." : "Export CSV"}</span>
           </button>
         </div>
       </div>
 
-      {/* College Table View with Morning, Lunch, and Afternoon Periods */}
+      {/* College Table View */}
       {timetable.length === 0 ? (
-        <div className="h-72 rounded-2xl border border-dashed border-surface-border flex items-center justify-center text-muted text-xs font-mono">
+        <div className="h-72 rounded-2xl border border-dashed border-border flex items-center justify-center text-muted text-xs font-mono">
           No active timetable yet. Click &quot;Start GA Evolution&quot; to optimize sessions across 8 AM – 5 PM.
         </div>
       ) : (
         <div className="overflow-x-auto w-full">
-          <div className="min-w-[980px] w-full border border-surface-border rounded-2xl overflow-hidden bg-surface">
-            {/* Table Header: Day (64px) | Periods 1-5 (minmax(0, 1fr)) | LUNCH (44px) | Periods 6-8 (minmax(0, 1fr)) */}
-            <div className="grid grid-cols-[64px_repeat(5,minmax(0,1fr))_44px_repeat(3,minmax(0,1fr))] bg-surface-raised/70 border-b border-surface-border text-xs text-muted font-medium">
-              <div className="p-3 border-r border-surface-border font-mono text-[11px] text-neutral-400 flex items-center justify-center">
+          <div className="min-w-[980px] w-full border border-border rounded-2xl overflow-hidden bg-surface shadow-xs">
+            {/* Table Header: Day (64px) | Periods 1-5 | LUNCH (44px) | Periods 6-8 */}
+            <div className="grid grid-cols-[64px_repeat(5,minmax(0,1fr))_44px_repeat(3,minmax(0,1fr))] bg-[#ebede6] border-b border-border text-xs text-text-secondary font-medium">
+              <div className="p-3 border-r border-border font-mono text-[11px] text-text-secondary flex items-center justify-center font-semibold">
                 Day
               </div>
 
@@ -214,9 +216,9 @@ export const TimetableGrid: React.FC<TimetableGridProps> = ({ timetable, dataset
               {[1, 2, 3, 4, 5].map((p) => (
                 <div
                   key={p}
-                  className="p-3 border-r border-surface-border text-center flex flex-col justify-center min-w-0"
+                  className="p-3 border-r border-border text-center flex flex-col justify-center min-w-0"
                 >
-                  <span className="font-mono text-xs text-white font-medium truncate">
+                  <span className="font-mono text-xs text-text-primary font-semibold truncate">
                     {PERIOD_TIMES[p].label}
                   </span>
                   <span className="text-[10px] text-muted font-mono mt-0.5 truncate">
@@ -226,12 +228,12 @@ export const TimetableGrid: React.FC<TimetableGridProps> = ({ timetable, dataset
               ))}
 
               {/* LUNCH BREAK COLUMN HEADER */}
-              <div className="p-2 border-r border-surface-border text-center bg-[#151a13] flex flex-col justify-center items-center">
-                <Coffee className="h-3 w-3 text-lime" />
-                <span className="text-[9px] font-mono text-lime font-medium mt-0.5">
+              <div className="p-2 border-r border-border text-center bg-coral/10 flex flex-col justify-center items-center">
+                <Coffee className="h-3.5 w-3.5 text-coral" />
+                <span className="text-[9px] font-mono text-coral font-bold mt-0.5">
                   LUNCH
                 </span>
-                <span className="text-[8px] text-lime/70 font-mono">
+                <span className="text-[8px] text-coral/80 font-mono">
                   1-2 PM
                 </span>
               </div>
@@ -240,9 +242,9 @@ export const TimetableGrid: React.FC<TimetableGridProps> = ({ timetable, dataset
               {[6, 7, 8].map((p) => (
                 <div
                   key={p}
-                  className="p-3 border-r last:border-r-0 border-surface-border text-center flex flex-col justify-center min-w-0"
+                  className="p-3 border-r last:border-r-0 border-border text-center flex flex-col justify-center min-w-0"
                 >
-                  <span className="font-mono text-xs text-white font-medium truncate">
+                  <span className="font-mono text-xs text-text-primary font-semibold truncate">
                     {PERIOD_TIMES[p].label}
                   </span>
                   <span className="text-[10px] text-muted font-mono mt-0.5 truncate">
@@ -256,10 +258,10 @@ export const TimetableGrid: React.FC<TimetableGridProps> = ({ timetable, dataset
             {days.map((day) => (
               <div
                 key={day}
-                className="grid grid-cols-[64px_repeat(5,minmax(0,1fr))_44px_repeat(3,minmax(0,1fr))] border-b last:border-b-0 border-surface-border hover:bg-white/[0.015] transition-colors"
+                className="grid grid-cols-[64px_repeat(5,minmax(0,1fr))_44px_repeat(3,minmax(0,1fr))] border-b last:border-b-0 border-border hover:bg-white/50 transition-colors"
               >
                 {/* Day Header */}
-                <div className="p-4 border-r border-surface-border font-mono text-xs font-semibold text-lime flex items-center justify-center bg-surface-raised/30">
+                <div className="p-4 border-r border-border font-mono text-xs font-bold text-forest flex items-center justify-center bg-surface">
                   {day}
                 </div>
 
@@ -267,8 +269,8 @@ export const TimetableGrid: React.FC<TimetableGridProps> = ({ timetable, dataset
                 {[1, 2, 3, 4, 5].map((period) => renderPeriodCell(day, period))}
 
                 {/* Lunch Break Divider Cell */}
-                <div className="border-r border-surface-border bg-gradient-to-b from-[#141a12]/60 to-[#10140e]/60 flex flex-col items-center justify-center p-1 text-center select-none">
-                  <span className="text-[9px] font-mono text-lime/70 uppercase tracking-widest [writing-mode:vertical-lr] rotate-180">
+                <div className="border-r border-border bg-coral/[0.04] flex flex-col items-center justify-center p-1 text-center select-none">
+                  <span className="text-[9px] font-mono text-coral/80 font-semibold uppercase tracking-widest [writing-mode:vertical-lr] rotate-180">
                     LUNCH BREAK
                   </span>
                 </div>
