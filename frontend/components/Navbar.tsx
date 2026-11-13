@@ -22,25 +22,27 @@ export const Navbar: React.FC<NavbarProps> = ({
   return (
     <header className="border-b border-surface-border bg-background/90 backdrop-blur-md sticky top-0 z-40 px-6 md:px-10 py-4">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-        {/* Brand & Course Subtitle */}
-        <div className="flex items-center gap-3.5">
-          <div className="h-10 w-10 rounded-2xl bg-gradient-to-br from-[#1c2214] to-[#121612] border border-lime-border flex items-center justify-center text-lime shadow-[0_0_20px_rgba(212,249,56,0.15)]">
-            <Zap className="h-5 w-5 fill-lime/20" />
+        {/* Brand */}
+        <div className="flex items-center gap-3">
+          <div className="h-10 w-10 rounded-2xl bg-gradient-to-br from-[#1c2414] to-[#0f140f] border border-lime/30 flex items-center justify-center text-lime shadow-[0_0_22px_rgba(212,249,56,0.2)]">
+            <svg
+              className="w-5 h-5"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <rect x="3" y="3" width="7" height="7" rx="2" className="fill-lime/30 stroke-lime" />
+              <rect x="14" y="3" width="7" height="7" rx="2" className="stroke-lime/60" />
+              <rect x="3" y="14" width="7" height="7" rx="2" className="stroke-lime/60" />
+              <rect x="14" y="14" width="7" height="7" rx="2" className="fill-lime stroke-lime" />
+            </svg>
           </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="text-sm font-semibold tracking-tight text-white">
-                OptiTable
-              </span>
-              <span className="text-[10px] font-mono px-2 py-0.5 rounded-full border border-lime-border text-lime bg-lime-muted">
-                GA Optimizer
-              </span>
-            </div>
-            <p className="text-[11px] text-muted">
-              Optimization Techniques • Scenario:{" "}
-              <span className="text-neutral-300 font-medium">{selectedScenarioName}</span>
-            </p>
-          </div>
+          <span className="text-lg font-semibold tracking-tight text-white">
+            ChronoGrid
+          </span>
         </div>
 
         {/* View Switcher Pills */}

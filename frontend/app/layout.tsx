@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "University Timetable Optimizer | Genetic Algorithm",
-  description: "Constraint-Aware Genetic Algorithm optimizer with real-time streaming and explainable operators for course optimization techniques.",
+  title: "ChronoGrid | Smart Timetable Optimizer",
+  description: "Next-generation smart university timetable optimizer powered by constraint-aware genetic algorithms.",
 };
 
 export default function RootLayout({
