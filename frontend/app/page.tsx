@@ -17,7 +17,6 @@ import {
   StreamEvent,
 } from "@/lib/types";
 import { fetchScenarios, streamOptimize } from "@/lib/api";
-import { Sparkles, GraduationCap, AlertTriangle, Clock, Layers } from "lucide-react";
 
 export default function HomePage() {
   const [activeTab, setActiveTab] = useState<"optimizer" | "visualizer">("optimizer");
@@ -201,92 +200,6 @@ export default function HomePage() {
           <>
             {activeTab === "optimizer" && (
               <div className="flex flex-col gap-8">
-                {/* Scenario Preset Selector Bento */}
-                <div className="p-6 md:p-7 rounded-3xl border border-border bg-surface-raised shadow-sm flex flex-col gap-5">
-                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
-                    <div>
-                      <span className="text-[10px] font-mono text-coral font-bold uppercase tracking-widest">
-                        College Scenario Presets
-                      </span>
-                      <h2 className="text-lg font-semibold text-text-primary tracking-tight mt-0.5">
-                        Select Benchmark Scenario
-                      </h2>
-                    </div>
-                    <div className="flex items-center gap-2 text-xs font-mono text-text-secondary bg-surface px-3 py-1.5 rounded-xl border border-border">
-                      <Clock className="w-3.5 h-3.5 text-forest" />
-                      <span>8:00 AM – 5:00 PM</span>
-                      <span className="text-muted">•</span>
-                      <span className="text-coral font-semibold">Lunch 1:00 – 2:00 PM</span>
-                    </div>
-                  </div>
-
-                  {/* Preset Cards Grid */}
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    {presets.map((preset) => {
-                      const isSelected = preset.metadata.id === selectedPresetId;
-                      const Icon =
-                        preset.metadata.id === "compact-demo"
-                          ? Sparkles
-                          : preset.metadata.id === "standard-university"
-                          ? GraduationCap
-                          : AlertTriangle;
-
-                      return (
-                        <button
-                          key={preset.metadata.id}
-                          onClick={() => handleSelectPreset(preset.metadata.id)}
-                          className={`p-5 rounded-2xl border text-left transition-all relative flex flex-col justify-between gap-3 shadow-sm ${
-                            isSelected
-                              ? "bg-surface border-forest ring-2 ring-forest"
-                              : "bg-surface border-border hover:border-text-secondary/40 text-text-secondary"
-                          }`}
-                        >
-                          <div className="flex items-start justify-between w-full">
-                            <div className="flex items-center gap-2.5">
-                              <div
-                                className={`p-2 rounded-xl ${
-                                  isSelected
-                                    ? "bg-forest text-white"
-                                    : "bg-surface-raised text-text-secondary border border-border"
-                                }`}
-                              >
-                                <Icon className="w-4 h-4" />
-                              </div>
-                              <div>
-                                <h3 className="text-xs font-bold text-text-primary">
-                                  {preset.metadata.name}
-                                </h3>
-                                <span className="text-[10px] font-mono text-muted">
-                                  {preset.metadata.difficulty} Difficulty
-                                </span>
-                              </div>
-                            </div>
-                            {isSelected && (
-                              <span className="text-[10px] font-mono font-bold bg-canary text-text-primary px-2 py-0.5 rounded-full border border-black/10">
-                                Active
-                              </span>
-                            )}
-                          </div>
-
-                          <p className="text-[11px] text-text-secondary line-clamp-2 leading-relaxed">
-                            {preset.metadata.description}
-                          </p>
-
-                          <div className="pt-2 border-t border-border/80 flex items-center justify-between text-[10px] font-mono text-muted">
-                            <span>{preset.metadata.num_subjects} Subjects</span>
-                            <span>•</span>
-                            <span>{preset.metadata.num_faculty} Faculty</span>
-                            <span>•</span>
-                            <span>{preset.metadata.num_rooms} Rooms</span>
-                            <span>•</span>
-                            <span>{preset.metadata.num_batches} Batches</span>
-                          </div>
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-
                 {/* Real-time KPI Cards */}
                 <LiveMetricsCards
                   generation={generation}
