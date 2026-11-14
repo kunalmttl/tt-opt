@@ -40,7 +40,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           </div>
           <div className="flex items-baseline gap-2">
             <span className="text-base font-semibold tracking-tight text-text-primary">
-              ChronoGrid
+              Timetable Optimizer
             </span>
             <span className="text-[11px] font-mono text-muted">
               • {selectedScenarioName}
