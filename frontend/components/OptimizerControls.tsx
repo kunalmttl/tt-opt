@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
-import { Play, Pause, RotateCcw, Sliders, ChevronDown, ChevronUp } from "lucide-react";
+import React from "react";
+import { Play, Pause, RotateCcw } from "lucide-react";
 import { GAConfig } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
@@ -30,10 +30,8 @@ export const OptimizerControls: React.FC<OptimizerControlsProps> = ({
   speed,
   setSpeed,
 }) => {
-  const [showAdvanced, setShowAdvanced] = useState(false);
-
   return (
-    <div className="p-8 rounded-3xl border border-border bg-surface-raised flex flex-col gap-8 shadow-sm">
+    <div className="p-8 rounded-3xl border border-border bg-surface-raised flex flex-col gap-6 shadow-sm">
       {/* Top Playback Actions */}
       <div className="flex flex-wrap items-center justify-between gap-5">
         <div className="flex items-center gap-3">
@@ -197,65 +195,6 @@ export const OptimizerControls: React.FC<OptimizerControlsProps> = ({
             className="w-full h-1.5 cursor-pointer disabled:opacity-40"
           />
         </div>
-      </div>
-
-      {/* Advanced GA Options */}
-      <div>
-        <button
-          onClick={() => setShowAdvanced(!showAdvanced)}
-          className="flex items-center gap-2 text-xs font-mono text-text-secondary hover:text-text-primary transition-colors"
-        >
-          <Sliders className="h-3.5 w-3.5 text-forest" />
-          <span>Advanced Heuristics (Stagnation & Local Search)</span>
-          {showAdvanced ? (
-            <ChevronUp className="h-3.5 w-3.5 ml-1" />
-          ) : (
-            <ChevronDown className="h-3.5 w-3.5 ml-1" />
-          )}
-        </button>
-
-        {showAdvanced && (
-          <div className="mt-5 pt-5 border-t border-border grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
-            <label className="flex items-center gap-3 p-3.5 rounded-2xl bg-surface border border-border text-text-secondary cursor-pointer hover:border-muted transition-all">
-              <input
-                type="checkbox"
-                checked={config.adaptive_mutation || false}
-                disabled={isStreaming}
-                onChange={(e) =>
-                  setConfig({ ...config, adaptive_mutation: e.target.checked })
-                }
-                className="w-4 h-4 rounded accent-forest bg-surface-raised border-border"
-              />
-              <span className="text-xs">Adaptive Mutation (Ramps on stagnation)</span>
-            </label>
-
-            <label className="flex items-center gap-3 p-3.5 rounded-2xl bg-surface border border-border text-text-secondary cursor-pointer hover:border-muted transition-all">
-              <input
-                type="checkbox"
-                checked={config.diversity_injection || false}
-                disabled={isStreaming}
-                onChange={(e) =>
-                  setConfig({ ...config, diversity_injection: e.target.checked })
-                }
-                className="w-4 h-4 rounded accent-forest bg-surface-raised border-border"
-              />
-              <span className="text-xs">Diversity Injection (Replaces worst)</span>
-            </label>
-
-            <label className="flex items-center gap-3 p-3.5 rounded-2xl bg-surface border border-border text-text-secondary cursor-pointer hover:border-muted transition-all">
-              <input
-                type="checkbox"
-                checked={config.local_search_enabled || false}
-                disabled={isStreaming}
-                onChange={(e) =>
-                  setConfig({ ...config, local_search_enabled: e.target.checked })
-                }
-                className="w-4 h-4 rounded accent-forest bg-surface-raised border-border"
-              />
-              <span className="text-xs">Memetic Local Search (Hill-climbing)</span>
-            </label>
-          </div>
-        )}
       </div>
     </div>
   );
