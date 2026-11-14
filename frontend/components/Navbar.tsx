@@ -1,14 +1,13 @@
 "use client";
 
 import React from "react";
-import { BarChart2, Eye, Database, Activity } from "lucide-react";
+import { Eye, Database, Activity } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface NavbarProps {
-  activeTab: "optimizer" | "benchmark" | "visualizer";
-  setActiveTab: (tab: "optimizer" | "benchmark" | "visualizer") => void;
+  activeTab: "optimizer" | "visualizer";
+  setActiveTab: (tab: "optimizer" | "visualizer") => void;
   onOpenEditor: () => void;
-  isBackendConnected: boolean;
   selectedScenarioName: string;
 }
 
@@ -16,7 +15,6 @@ export const Navbar: React.FC<NavbarProps> = ({
   activeTab,
   setActiveTab,
   onOpenEditor,
-  isBackendConnected,
   selectedScenarioName,
 }) => {
   return (
@@ -50,7 +48,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           </div>
         </div>
 
-        {/* View Switcher Pills */}
+        {/* View Switcher Pills: Live Optimizer & Operator Visualizer */}
         <div className="flex items-center gap-1.5 p-1 bg-surface-raised border border-border rounded-2xl shadow-sm">
           <button
             onClick={() => setActiveTab("optimizer")}
@@ -63,19 +61,6 @@ export const Navbar: React.FC<NavbarProps> = ({
           >
             <Activity className="h-3.5 w-3.5" />
             Live Optimizer
-          </button>
-
-          <button
-            onClick={() => setActiveTab("benchmark")}
-            className={cn(
-              "flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-medium transition-all",
-              activeTab === "benchmark"
-                ? "bg-forest text-white shadow-sm"
-                : "text-text-secondary hover:text-text-primary hover:bg-black/5"
-            )}
-          >
-            <BarChart2 className="h-3.5 w-3.5" />
-            Benchmark Suite
           </button>
 
           <button
@@ -92,7 +77,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           </button>
         </div>
 
-        {/* Right Tools */}
+        {/* Right Tools: Scenario Data Editor */}
         <div className="flex items-center gap-3">
           <button
             onClick={onOpenEditor}
