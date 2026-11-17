@@ -18,12 +18,10 @@ def build_report():
         section.page_width = Inches(8.5)
         section.page_height = Inches(11.0)
 
-    # ---------------- STRICT COLOR & FONT ENFORCEMENT ----------------
-    # STRICTLY BLACK COLOR AND TIMES NEW ROMAN
+    # ---------------- STRICT BLACK COLOR & TIMES NEW ROMAN ----------------
     COLOR_BLACK = RGBColor(0, 0, 0)
     FONT_NAME = "Times New Roman"
 
-    # Set default Normal style
     normal_style = doc.styles['Normal']
     normal_style.font.name = FONT_NAME
     normal_style.font.size = Pt(12)
@@ -77,7 +75,7 @@ def build_report():
         p.paragraph_format.keep_with_next = True
         r = p.add_run(text)
         r.font.name = FONT_NAME
-        r.font.size = Pt(16)
+        r.font.size = Pt(15)
         r.font.bold = True
         r.font.color.rgb = COLOR_BLACK
         return p
@@ -89,7 +87,7 @@ def build_report():
         p.paragraph_format.keep_with_next = True
         r = p.add_run(text)
         r.font.name = FONT_NAME
-        r.font.size = Pt(13.5)
+        r.font.size = Pt(13)
         r.font.bold = True
         r.font.color.rgb = COLOR_BLACK
         return p
@@ -138,7 +136,7 @@ def build_report():
     add_p("Intelligent University Course Scheduling Using Constraint-Aware\nGenetic Algorithms with Heuristic Repair and Real-Time Streaming",
           align=WD_ALIGN_PARAGRAPH.CENTER, space_before=6, space_after=24, italic=True, size=13)
 
-    p_div = add_p("―" * 32, align=WD_ALIGN_PARAGRAPH.CENTER, space_before=12, space_after=36)
+    add_p("―" * 32, align=WD_ALIGN_PARAGRAPH.CENTER, space_before=12, space_after=36)
     
     add_p("Submitted in partial fulfillment of the requirements for the course", align=WD_ALIGN_PARAGRAPH.CENTER, space_after=4, italic=True, size=11)
     add_p("OPTIMIZATION TECHNIQUES IN ELECTRICAL ENGINEERING", align=WD_ALIGN_PARAGRAPH.CENTER, space_after=48, bold=True, size=13)
@@ -201,10 +199,10 @@ def build_report():
     # =========================================================================
     add_h1("Certificate")
     add_p(
-        "This is to certify that the project entitled \"TIMETABLE OPTIMIZER: Intelligent University Course Scheduling "
+        "This is to certify that the project report entitled \"TIMETABLE OPTIMIZER: Intelligent University Course Scheduling "
         "Using Constraint-Aware Genetic Algorithms\" submitted by Kunal Mittal (SID: 23104066) and Asmit Malhotra (SID: 23104036) "
         "in partial fulfillment of the requirements for the course Optimization Techniques in Electrical Engineering at "
-        "Punjab Engineering College, Chandigarh, is an authentic record of work carried out under my supervision.",
+        "Punjab Engineering College, Chandigarh, is an authentic record of original work carried out under my supervision.",
         space_after=36
     )
 
@@ -243,38 +241,36 @@ def build_report():
     # =========================================================================
     add_h1("Acknowledgement")
     add_p(
-        "We express our deepest gratitude to our course instructor, Dr. Sandeep Kaur, for her invaluable guidance, "
-        "encouragement, and critical insights throughout the course of this project. Her teachings in Optimization Techniques "
-        "provided the theoretical foundation necessary to formulate and solve this complex combinatorial problem."
+        "We express our sincere gratitude to our course instructor, Dr. Sandeep Kaur, for her valuable guidance, "
+        "continuous encouragement, and practical insights throughout this semester. Her teaching in Optimization Techniques "
+        "inspired us to tackle this challenging real-world problem and provided the theoretical foundation needed to design, "
+        "implement, and evaluate our evolutionary scheduling algorithm."
     )
     add_p(
-        "We would also like to thank the Department of Electrical Engineering at Punjab Engineering College, Chandigarh, "
-        "for providing the academic environment, computational infrastructure, and resources needed to develop and test "
-        "this optimization system."
+        "We are also thankful to the Department of Electrical Engineering and the administration of Punjab Engineering College, "
+        "Chandigarh, for providing the laboratory facilities and academic environment that enabled us to build and verify this project."
     )
 
     add_h1("Abstract")
     add_p(
-        "University course timetabling is a notoriously difficult, NP-hard combinatorial optimization problem. "
-        "Constructing a valid timetable requires scheduling dozens of subjects, faculty members, and student batches "
-        "into limited classrooms and time slots while satisfying non-negotiable physical constraints (zero teacher, room, "
-        "or batch overlaps) and optimizing soft ergonomic preferences (minimizing idle waiting gaps between classes). "
-        "Manual scheduling takes days or weeks and frequently results in overlooked clashes."
+        "Making a college timetable manually is one of the most frustrating puzzles any academic department faces. "
+        "Imagine having dozens of professors, hundreds of students divided into sections, and a limited number of classrooms "
+        "and laboratories. Every single class must be assigned to an exact day, hour, and room. A single mistake—such as scheduling "
+        "two professors in the same room or booking one professor for two classes at once—makes the entire schedule unworkable. "
+        "Because there are billions of ways to arrange classes, finding a clash-free timetable by hand can take days or weeks."
     )
     add_p(
-        "In this project, we design and implement Timetable Optimizer, a complete automated scheduling solution powered "
-        "by a Constraint-Aware Genetic Algorithm (GA) written from first principles in Python. The system models an authentic "
-        "college timetable format operating from 8:00 AM to 5:00 PM across 8 teaching periods, incorporating a universal "
-        "lunch break from 1:00 PM to 2:00 PM. To overcome the slow convergence of traditional blind genetic algorithms, we "
-        "introduce an active Heuristic Constraint Repair pass that immediately resolves detected room and teacher overlaps "
-        "during offspring generation."
+        "In this project, we created Timetable Optimizer, a software system that automates this entire process using a "
+        "Constraint-Aware Genetic Algorithm. A genetic algorithm solves problems by mimicking biological evolution: it creates an "
+        "initial population of random schedules, scores how good or bad each schedule is, breeds the best ones together, and "
+        "mutates them slightly to find better arrangements. To make it especially powerful, we added a Heuristic Repair step: whenever "
+        "a clash is detected, the algorithm immediately moves that class into an empty slot, resolving conflicts on the spot."
     )
     add_p(
-        "The backend is built using FastAPI and streams real-time generation statistics via Server-Sent Events (SSE) to a "
-        "reactive Next.js 14 frontend. The application includes a 6-stage educational Operator Visualizer that step-by-step "
-        "explains selection, crossover, mutation, and constraint repair. Tested across varying institutional scales, the "
-        "optimizer consistently eliminates 100% of hard clashes, converging to a mathematically optimal timetable in under "
-        "one second (0.78s), and is deployed live on Vercel."
+        "The system schedules classes across a standard university day from 8:00 AM to 5:00 PM (8 one-hour teaching periods), with "
+        "a guaranteed universal lunch break from 1:00 PM to 2:00 PM. The application consists of a fast Python (FastAPI) optimization "
+        "engine connected to a modern Next.js web dashboard. It solves full college departments in less than one second (0.78 seconds), "
+        "shows live real-time convergence graphs, and includes a step-by-step visualizer that clearly explains how the algorithm works."
     )
 
     doc.add_page_break()
@@ -286,31 +282,33 @@ def build_report():
     
     toc_data = [
         ("1. Introduction and Problem Definition", "1"),
-        ("   1.1 The Academic Timetabling Challenge", "1"),
-        ("   1.2 Computational Complexity: Why NP-Hardness Matters", "2"),
-        ("   1.3 College Schedule Architecture (8:00 AM – 5:00 PM with Lunch)", "3"),
-        ("2. Problem Modeling and Mathematical Formulation", "4"),
-        ("   2.1 Gene and Chromosome Representation", "4"),
-        ("   2.2 Hard Constraints: Physical Feasibility", "5"),
-        ("   2.3 Soft Constraints: Human Convenience", "6"),
-        ("   2.4 The Objective Penalty Function and Fitness Metric", "7"),
+        ("   1.1 The Timetable Problem in Everyday Language", "1"),
+        ("   1.2 Why Computers Cannot Simply Guess (NP-Hardness Explained)", "2"),
+        ("   1.3 The College Schedule: 8:00 AM – 5:00 PM with Lunch Break", "3"),
+        ("2. Problem Modeling: Turning Timetables into Math", "4"),
+        ("   2.1 Genes and Chromosomes: The Building Blocks", "4"),
+        ("   2.2 Hard Constraints: The Absolute Deal-Breakers", "5"),
+        ("   2.3 Soft Constraints: Human Comfort and Quality", "6"),
+        ("   2.4 The Cost and Fitness Score Formulas", "7"),
         ("3. The Genetic Algorithm Methodology", "8"),
-        ("   3.1 Evolutionary Principles & Flowchart", "8"),
-        ("   3.2 Tournament Selection (k = 3)", "9"),
-        ("   3.3 Two-Point Crossover Recombination", "10"),
-        ("   3.4 Stochastic Mutation & Diversity Injection", "11"),
-        ("   3.5 Heuristic Constraint Repair (Active Conflict Resolution)", "12"),
-        ("   3.6 Elitism and Early Stagnation Termination", "13"),
-        ("4. System Architecture and Application Interface", "14"),
-        ("   4.1 Full-Stack Software Architecture", "14"),
-        ("   4.2 Live Optimizer Dashboard & Symmetrical Grid (Screenshots)", "15"),
-        ("   4.3 The 6-Stage Operator Visualizer Suite (Screenshots)", "17"),
-        ("5. Experimental Results, Sensitivity Analysis, and Verification", "19"),
-        ("   5.1 Convergence Trajectory and Speed", "19"),
-        ("   5.2 Parameter Sensitivity Analysis (What Happens When Sliders Move)", "20"),
-        ("   5.3 Automated Pytest Suite Verification (29 Tests)", "21"),
-        ("6. Conclusion and Future Work", "22"),
-        ("References", "23")
+        ("   3.1 The Evolutionary Cycle: Natural Selection at Work", "8"),
+        ("   3.2 Step 1: Population Initialization", "8"),
+        ("   3.3 Step 2: Scoring the Schedules", "9"),
+        ("   3.4 Step 3: Tournament Selection (Picking the Best Parents)", "9"),
+        ("   3.5 Step 4: Two-Point Crossover (Combining Good Schedules)", "10"),
+        ("   3.6 Step 5: Gene Mutation (Adding Variety to Avoid Traps)", "10"),
+        ("   3.7 Step 6: Heuristic Repair (Our Secret Weapon)", "11"),
+        ("   3.8 Step 7 & 8: Elitism and Early Stagnation Stop", "11"),
+        ("4. System Architecture and Application Interface", "12"),
+        ("   4.1 How the Software is Built (Backend and Frontend)", "12"),
+        ("   4.2 Live Optimizer Dashboard & Timetable Grid (Screenshots)", "13"),
+        ("   4.3 The 6-Stage Operator Visualizer Suite (Screenshots)", "15"),
+        ("5. Experimental Results, Slider Effects, and Testing", "17"),
+        ("   5.1 Convergence Performance (From 105 Clashes to Zero in 0.78s)", "17"),
+        ("   5.2 Slider Sensitivity: What Happens When You Tweak Parameters", "18"),
+        ("   5.3 Automated Testing with Pytest (29 Tests Passing)", "19"),
+        ("6. Conclusion and Future Roadmap", "20"),
+        ("References", "21")
     ]
 
     tbl_toc = doc.add_table(rows=len(toc_data), cols=2)
@@ -349,51 +347,57 @@ def build_report():
     # =========================================================================
     add_h1("Chapter 1: Introduction and Problem Definition")
     
-    add_h2("1.1 The Academic Timetabling Challenge")
+    add_h2("1.1 The Timetable Problem in Everyday Language")
     add_p(
-        "At the beginning of every semester in universities and engineering colleges like Punjab Engineering College, "
-        "academic coordinators face the daunting task of creating a master weekly timetable. The scheduling requirements "
-        "can be stated simply: ensure that every batch of students attends their required lectures and laboratories, "
-        "taught by qualified faculty, in rooms with sufficient seating capacity."
+        "Every college student and professor has looked at their weekly schedule. We know that on Monday at 9:00 AM, Section A "
+        "has Data Structures with Dr. Sharma in Room 101. But very few people realize how difficult it is to create that schedule "
+        "in the first place."
     )
     add_p(
-        "However, turning this goal into reality is extremely difficult. In a typical academic department, dozens of "
-        "courses, multiple student cohorts, specialized laboratories, lecture theaters, and professors interact simultaneously. "
-        "A professor cannot teach two different classes at the same time; two classes cannot be scheduled into the same room "
-        "simultaneously; and student batches cannot be in two places at once. When timetables are created manually on paper or "
-        "spreadsheets, moving one class to resolve an overlap causes a cascade of secondary conflicts across other departments, "
-        "taking days of trial-and-error."
+        "Think of a university timetable like a giant three-dimensional puzzle. We have three main questions to answer for every "
+        "single lecture session across the week:\n"
+        "1. WHO is teaching it and WHO is attending? (The professor and the student batch)\n"
+        "2. WHEN is it happening? (Which day of the week, and which hour of the day)\n"
+        "3. WHERE is it happening? (Which classroom or laboratory)"
+    )
+    add_p(
+        "If you schedule two classes for the same professor at the exact same hour, that is physically impossible—one person cannot "
+        "be in two rooms at once. If you put two classes in the same lecture hall at the same time, the students will walk in and "
+        "collide with each other. If you assign a batch of 60 students to a small 30-seat computer lab, half the students will have "
+        "nowhere to sit. When coordinators try to build timetables manually on paper or Excel, fixing one overlap causes a chain reaction "
+        "that breaks three other classes. It is exhausting and prone to human error."
     )
 
-    add_h2("1.2 Computational Complexity: Why NP-Hardness Matters")
+    add_h2("1.2 Why Computers Cannot Simply Guess (NP-Hardness Explained)")
     add_p(
-        "In computer science and operations research, the University Course Timetabling Problem is classified as NP-hard "
-        "(Non-Deterministic Polynomial-time Hard). To understand what this means in simple terms, consider a modest department "
-        "with 80 weekly lecture sessions that must be scheduled into 40 available time slots (5 days × 8 periods) and 10 rooms. "
-        "The total number of possible ways to arrange these classes is:"
+        "You might ask: 'Why can't we just write a simple program that tests every possible schedule combination and chooses the "
+        "best one?' This is where computational mathematics comes in."
+    )
+    add_p(
+        "Imagine a small department with 80 class sessions per week, 40 available time slots (5 days × 8 hours), and 10 rooms. "
+        "For each class session, there are 40 × 10 = 400 possible places to put it. For all 80 sessions, the total number of "
+        "different timetable combinations is:"
     )
     
-    p_eq = add_p("Total Candidate Combinations ≈ 400⁸⁰ ≈ 10²⁰⁸ possible timetables", align=WD_ALIGN_PARAGRAPH.CENTER, bold=True)
+    add_p("Total Combinations = 400⁸⁰ ≈ 10²⁰⁸ possible timetables", align=WD_ALIGN_PARAGRAPH.CENTER, bold=True)
     
     add_p(
-        "The number 10²⁰⁸ is vastly greater than the estimated total number of atoms in the entire observable universe (which is "
-        "about 10⁸⁰). Even if a supercomputer could test one billion timetables every second, it could never inspect even an "
-        "infinitesimal fraction of the possibilities before the universe ends. Therefore, exhaustive brute-force search is "
-        "impossible. Exact mathematical solvers also struggle because the constraints are non-linear and tightly coupled."
+        "To give you an idea of how big 10²⁰⁸ is: the entire observable universe only contains about 10⁸⁰ atoms. The number of timetable "
+        "combinations is greater than all the atoms in the universe squared! Even a supercomputer that can test a billion timetables "
+        "every second would take trillions of years to check them all. In computer science, this is called an NP-Hard Combinatorial Problem."
     )
     add_p(
-        "Instead, we turn to Metaheuristic Optimization. Specifically, Genetic Algorithms (GA) allow us to search this vast space "
-        "intelligently. Rather than testing possibilities blindly, the algorithm evolves solutions iteratively, learning and "
-        "preserving conflict-free schedule patterns to produce an optimal timetable in seconds."
+        "Because brute force is mathematically impossible, we need smart optimization techniques. Instead of guessing randomly, our "
+        "Genetic Algorithm starts with a small group of candidate timetables and iteratively improves them, learning which arrangements "
+        "work best and producing a perfect schedule in under one second."
     )
 
-    add_h2("1.3 College Schedule Architecture (8:00 AM – 5:00 PM with Lunch)")
+    add_h2("1.3 The College Schedule: 8:00 AM – 5:00 PM with Lunch Break")
     add_p(
-        "To replicate realistic college operations, our system implements an authentic collegiate schedule consisting of 8 active "
-        "teaching periods and a universal 1-hour lunch break across Monday through Friday:"
+        "Our system is modeled around the real daily schedule used at Punjab Engineering College and other universities. The college "
+        "operates from 8:00 AM to 5:00 PM, Monday through Friday, with a universal lunch break from 1:00 PM to 2:00 PM:"
     )
 
-    # Table of Schedule
     tbl_s = doc.add_table(rows=10, cols=3)
     tbl_s.alignment = WD_TABLE_ALIGNMENT.CENTER
     tbl_s.autofit = False
@@ -406,8 +410,8 @@ def build_report():
         ("Period 4", "11:00 AM – 12:00 PM", "Pre-Noon Academic Period"),
         ("Period 5", "12:00 PM – 01:00 PM", "Mid-Day Academic Period"),
         ("LUNCH BREAK", "01:00 PM – 02:00 PM", "Universal Lunch Break (Zero classes scheduled)"),
-        ("Period 6", "02:00 PM – 03:00 PM", "Afternoon Session"),
-        ("Period 7", "03:00 PM – 04:00 PM", "Afternoon Session"),
+        ("Period 6", "02:00 PM – 03:00 PM", "Afternoon Academic Session"),
+        ("Period 7", "03:00 PM – 04:00 PM", "Afternoon Academic Session"),
         ("Period 8", "04:00 PM – 05:00 PM", "Late Afternoon Session"),
     ]
 
@@ -431,73 +435,76 @@ def build_report():
             r.font.color.rgb = COLOR_BLACK
 
     add_p(
-        "Lunch Gap Neutrality: In our mathematical representation, the morning teaching periods are numbered 1 through 5, "
-        "and afternoon teaching periods are numbered 6 through 8. When a class is scheduled in Period 5 followed by a class "
-        "in Period 6, the period difference is 6 - 5 = 1. This prevents the idle gap penalty from unfairly penalizing students "
-        "or faculty for taking their scheduled lunch hour.",
+        "Why Lunch Gap Neutrality Matters: The morning periods are numbered 1 through 5, and the afternoon periods are numbered "
+        "6 through 8. If a student has a class in Period 5 (ending at 1:00 PM) and their next class in Period 6 (starting at 2:00 PM), "
+        "the period difference is 6 - 5 = 1. Mathematically, the algorithm recognizes this as continuous, so it never penalizes "
+        "teachers or students for taking their lunch hour.",
         space_before=8
     )
 
     doc.add_page_break()
 
     # =========================================================================
-    # CHAPTER 2: PROBLEM MODELING & CONSTRAINTS
+    # CHAPTER 2: PROBLEM MODELING: TURNING TIMETABLES INTO MATH
     # =========================================================================
-    add_h1("Chapter 2: Problem Modeling and Mathematical Formulation")
+    add_h1("Chapter 2: Problem Modeling: Turning Timetables into Math")
     
-    add_h2("2.1 Gene and Chromosome Representation")
+    add_h2("2.1 Genes and Chromosomes: The Building Blocks")
     add_p(
-        "To make a timetable understandable to a Genetic Algorithm, we model it like biological DNA:"
+        "To make a computer solve a timetable problem, we convert schedules into digital structures borrowed from genetics:"
     )
     add_p(
-        "1. Gene (Lego Brick): A single 1-hour class session. Each gene is modeled as a 6-tuple:\n"
+        "1. The Gene (A Single Class Session):\n"
+        "Think of a gene like a single Lego brick. Each gene contains six pieces of information:\n"
         "   Gene g = (Subject, Faculty, Batch, Room, Day, Period)\n"
-        "   • Fixed Attributes: Subject, Faculty, Batch (determined by the curriculum syllabus).\n"
-        "   • Decision Variables: Room, Day (Mon–Fri), Period (1–8) (optimized by the GA)."
+        "• Fixed Information (The Curriculum Requirements): Subject, Professor, and Student Batch. We cannot change who teaches what.\n"
+        "• Variable Information (What the Algorithm Decides): Room, Day (Mon–Fri), and Period (1–8)."
     )
     add_p(
-        "2. Chromosome (Complete Timetable): A full candidate schedule containing all weekly sessions. If a department "
-        "requires 60 total lecture sessions in a week, a chromosome is an ordered array of 60 genes: C = [g₁, g₂, ..., g₆₀]."
+        "2. The Chromosome (A Full Weekly Timetable):\n"
+        "A chromosome is simply a chain of all the genes together. If an engineering department needs 60 lecture sessions across "
+        "the week, one candidate timetable is an array of 60 genes: Chromosome C = [Gene 1, Gene 2, ..., Gene 60]."
     )
 
-    add_h2("2.2 Hard Constraints: Physical Feasibility")
+    add_h2("2.2 Hard Constraints: The Absolute Deal-Breakers")
     add_p(
-        "Hard constraints are absolute rules dictated by physical reality. If even one hard constraint is violated, the "
-        "timetable cannot function. Our engine enforces four hard constraints:"
+        "In optimization, constraints are rules. We divide them into two categories: Hard Constraints and Soft Constraints. "
+        "Hard constraints are non-negotiable physical laws. If a timetable violates even one hard constraint, it cannot be used:"
     )
-    add_p("• Faculty Clash: A professor cannot teach two different classes at the same time: (Fa = Fb ∧ Da = Db ∧ Pa = Pb) ⇒ Conflict.")
-    add_p("• Batch Clash: A student cohort cannot attend two classes at the same time: (Ba = Bb ∧ Da = Db ∧ Pa = Pb) ⇒ Conflict.")
-    add_p("• Room Clash: A room cannot host two classes at the same time: (Ra = Rb ∧ Da = Db ∧ Pa = Pb) ⇒ Conflict.")
-    add_p("• Capacity Violation: The assigned room must have enough seats for the student batch: Capacity(Rg) < Students(Bg) ⇒ Violation.")
+    add_p("• Rule 1: No Faculty Double-Booking. A professor cannot teach two different classes at the exact same hour.")
+    add_p("• Rule 2: No Student Batch Double-Booking. A section (e.g. 3rd Year Electrical) cannot attend two lectures at the same time.")
+    add_p("• Rule 3: No Room Double-Booking. A classroom or laboratory cannot host two different classes simultaneously.")
+    add_p("• Rule 4: Seating Capacity Limit. The assigned room must have enough seats for all students in the batch.")
 
-    add_h2("2.3 Soft Constraints: Human Convenience")
+    add_h2("2.3 Soft Constraints: Human Comfort and Quality")
     add_p(
-        "Soft constraints determine how pleasant and ergonomic the schedule is. They do not break the schedule, but "
-        "minimizing them improves academic productivity:"
+        "Soft constraints do not make a timetable impossible, but they make it much better for humans. Nobody likes a poorly organized "
+        "schedule. We reward schedules that respect three soft rules:"
     )
-    add_p("• Faculty Idle Gaps: Minimizing long unproductive waiting gaps between a teacher's first and last class on any day.")
-    add_p("• Student Idle Gaps: Preventing awkward 2-to-3 hour empty gaps between lectures for student cohorts.")
-    add_p("• Session Distribution: Spreading weekly sessions of a subject across different days rather than bunching 3 lectures on one day.")
+    add_p("• Rule 1: Minimize Faculty Waiting Gaps. If a professor teaches at 8:00 AM and has their next class at 4:00 PM, they have to sit around for 7 empty hours. We minimize these idle gaps.")
+    add_p("• Rule 2: Minimize Student Waiting Gaps. Students should have clean, compact schedules without awkward 2-hour empty gaps between lectures.")
+    add_p("• Rule 3: Spread Subject Lectures Evenly. A 3-credit subject should meet on Monday, Wednesday, and Friday—not crammed into three back-to-back lectures on Monday morning.")
 
-    add_h2("2.4 The Objective Penalty Function and Fitness Metric")
+    add_h2("2.4 The Cost and Fitness Score Formulas")
     add_p(
-        "Every candidate timetable is evaluated using an Objective Cost Function. Hard violations are multiplied by a severe "
-        "penalty weight of 1000, ensuring the algorithm ruthlessly prioritizes physical feasibility over soft preferences:"
+        "To tell the computer how good or bad a timetable is, we calculate a Penalty Cost. Hard clashes receive an enormous penalty "
+        "(1000 penalty points each), while soft gaps receive small penalties (5 to 15 points):"
     )
     
-    add_p("Total Cost = (1000 × Hard Violations) + (10 × Faculty Gaps) + (5 × Student Gaps) + (15 × Clustering)",
+    add_p("Total Penalty Cost = (1000 × Hard Clashes) + (10 × Faculty Gaps) + (5 × Student Gaps) + (15 × Clustering)",
           align=WD_ALIGN_PARAGRAPH.CENTER, bold=True)
 
     add_p(
-        "Because Genetic Algorithms naturally maximize fitness rather than minimizing cost, we map cost to a normalized "
-        "[0, 1] fitness score using the reciprocal formulation:"
+        "In Genetic Algorithms, we want to maximize Fitness (higher is better), but our cost function calculates penalties (lower is better). "
+        "We convert cost into a clean normalized fitness score using this simple formula:"
     )
 
-    add_p("Fitness = 1.0 / (1.0 + Total Cost)", align=WD_ALIGN_PARAGRAPH.CENTER, bold=True)
+    add_p("Fitness = 1.0 / (1.0 + Total Penalty Cost)", align=WD_ALIGN_PARAGRAPH.CENTER, bold=True)
 
     add_p(
-        "• High Cost (e.g. 5 clashes, Cost = 5000) ⇒ Fitness ≈ 0.0002 (Very low fitness, discarded by natural selection).\n"
-        "• Zero Cost (0 clashes, 0 gaps, Cost = 0.0) ⇒ Fitness = 1.0 / (1.0 + 0) = 1.0000 (Mathematical optimum!)."
+        "Let us look at two simple examples:\n"
+        "• Example A (Bad Timetable with 5 clashes): Cost = 5000+ points. Fitness = 1 / 5001 = 0.0002. This schedule is terrible and will be eliminated immediately.\n"
+        "• Example B (Perfect Timetable with 0 clashes and 0 gaps): Cost = 0.0 points. Fitness = 1 / (1 + 0) = 1.0000. This is the absolute mathematical maximum!"
     )
 
     doc.add_page_break()
@@ -507,57 +514,68 @@ def build_report():
     # =========================================================================
     add_h1("Chapter 3: The Genetic Algorithm Methodology")
     
-    add_h2("3.1 Evolutionary Principles & Flowchart")
+    add_h2("3.1 The Evolutionary Cycle: Natural Selection at Work")
     add_p(
-        "Genetic Algorithms simulate the evolutionary process of natural selection. In biology, organisms with traits that "
-        "best suit their environment survive, reproduce, and pass those advantages to their offspring. In our optimizer, "
-        "timetables with fewer clashes survive and breed, while clash-heavy timetables are eliminated."
+        "How does a Genetic Algorithm actually find a perfect timetable without testing all 10²⁰⁸ combinations? It works exactly like "
+        "breeding in nature. In nature, the healthiest animals survive, reproduce, and pass on their good genes to their offspring. "
+        "Over many generations, the species becomes stronger, faster, and smarter."
+    )
+    add_p(
+        "In our software, candidate timetables are the 'animals'. Clash-ridden timetables die out quickly, while clash-free timetables "
+        "mate with each other to produce even better offspring. The entire process follows 8 clear steps:"
     )
 
+    add_h2("3.2 Step 1: Population Initialization")
     add_p(
-        "Flowchart of the Evolutionary Process:\n"
-        "[1. Input Dataset] ──► [2. Initial Population (60)] ──► [3. Fitness Evaluation]\n"
-        "         ▲                                                          │\n"
-        "         │                                                          ▼\n"
-        "   [Next Gen Pool] ◄── [7. Elitism (4)] ◄── [6. Repair] ◄── [4. Tournament Selection]\n"
-        "                                                                    │\n"
-        "                                                    [5. Two-Point Crossover & Mutation]"
+        "The algorithm begins by creating an initial pool of 60 candidate timetables. At this starting point, the computer assigns "
+        "rooms, days, and periods largely at random. As you would expect, almost every schedule in Generation 1 is full of overlaps "
+        "and has a high cost (around 105 points)."
     )
 
-    add_h2("3.2 Tournament Selection (k = 3)")
+    add_h2("3.3 Step 2: Scoring the Schedules")
     add_p(
-        "To decide which timetables get to become parents, the algorithm runs tournaments. A random pool of k = 3 candidates "
-        "is sampled from the population. The candidate with the highest fitness (lowest cost) wins the tournament and is "
-        "selected into the mating pool. This creates healthy selection pressure while preserving population diversity."
+        "Every single candidate timetable in the population is inspected by our constraint engine. The engine counts every double-booked "
+        "professor, classroom, and batch, calculates the penalty cost, and gives each timetable a fitness score between 0.0 and 1.0."
     )
 
-    add_h2("3.3 Two-Point Crossover Recombination")
+    add_h2("3.4 Step 3: Tournament Selection (Picking the Best Parents)")
     add_p(
-        "With an 80% crossover probability, two winning parent timetables exchange genetic material. Two cut-points are chosen "
-        "along the gene sequence. Offspring inherit the middle segment of classes from one parent and outer segments from the "
-        "other parent, successfully combining conflict-free morning and afternoon schedules."
+        "We cannot let bad timetables breed, but we also cannot pick only the single best timetable (that would eliminate diversity). "
+        "Instead, we hold mini-tournaments: three random timetables are chosen from the population. The one with the highest fitness "
+        "wins the tournament and gets chosen to become a parent. This gives good timetables a high chance of reproducing while keeping "
+        "the population diverse."
     )
 
-    add_h2("3.4 Stochastic Mutation & Diversity Injection")
+    add_h2("3.5 Step 4: Two-Point Crossover (Combining Good Schedules)")
     add_p(
-        "With a 10% probability, random class sessions in the offspring undergo mutation: changing their day, period, or room. "
-        "This diversity injection introduces novel schedule configurations and prevents the entire population from stagnating "
-        "in a local minimum."
+        "Once two fit parent timetables are selected, they mate to create two new child timetables. We use Two-Point Crossover: the "
+        "algorithm picks two cut-points along the class list, takes the middle section of classes from Parent A, and takes the remaining "
+        "classes from Parent B. The result is a child timetable that inherits the clash-free morning block from Mom and the clash-free "
+        "afternoon block from Dad."
     )
 
-    add_h2("3.5 Heuristic Constraint Repair (Active Conflict Resolution)")
+    add_h2("3.6 Step 5: Gene Mutation (Adding Variety to Avoid Traps)")
     add_p(
-        "A critical limitation of traditional genetic algorithms is that random crossover and mutation can inadvertently "
-        "introduce new overlaps. Rather than relying on luck to fix these, our optimizer executes an active Heuristic Repair pass: "
-        "conflicting classes are systematically detected and moved to vacant, valid time slots. This drives clashes to zero rapidly."
+        "If you only combine existing parents, you might eventually run out of new ideas. With a 10% probability, the algorithm mutates "
+        "a few class sessions in the child: randomly moving a class to another day or assigning it to a different room. This introduces "
+        "fresh variety and ensures the search never gets stuck in a dead-end."
     )
 
-    add_h2("3.6 Elitism and Early Stagnation Termination")
+    add_h2("3.7 Step 6: Heuristic Repair (Our Secret Weapon)")
     add_p(
-        "• Elitism (Top 4 Preserved): The best 4 timetables of every generation are copied directly into the next generation "
-        "without mutation. This ensures that the algorithm never loses its best solution.\n"
-        "• Early Stagnation Termination: When zero hard violations are achieved and the score does not improve for 40 consecutive "
-        "generations, the engine stops early, saving CPU time."
+        "In standard genetic algorithms, random crossover and mutation can accidentally create new clashes. Standard algorithms just "
+        "penalize the child and hope for the best. Our system is much smarter: we added an active Heuristic Constraint Repair pass. "
+        "Whenever a child timetable has an overlap, the repair operator immediately finds an empty, valid room and time slot and moves "
+        "the class there. This active healing is why our algorithm eliminates all clashes in less than one second!"
+    )
+
+    add_h2("3.8 Step 7 & 8: Elitism and Early Stagnation Stop")
+    add_p(
+        "• Elitism (Top 4 Preserved): The best 4 timetables of each generation are automatically saved and passed directly into the next "
+        "generation without any changes. This guarantees that once a good timetable is discovered, it is never lost.\n"
+        "• Early Stagnation Stop: Even if you set the slider to 200 generations, the algorithm is smart enough to know when to stop. "
+        "If it achieves zero clashes and the score stays at 0.0 for 40 consecutive generations, it stops immediately. That is why it "
+        "completes at Generation 54 instead of wasting time running all the way to 200!"
     )
 
     doc.add_page_break()
@@ -567,74 +585,87 @@ def build_report():
     # =========================================================================
     add_h1("Chapter 4: System Architecture and Application Interface")
     
-    add_h2("4.1 Full-Stack Software Architecture")
+    add_h2("4.1 How the Software is Built (Backend and Frontend)")
     add_p(
-        "The project is structured as a decoupled, high-performance web application:\n"
-        "• Backend: Python 3.10 with FastAPI. Manages the mathematical models, GA loop, and Server-Sent Events (SSE) streaming.\n"
-        "• Frontend: Next.js 14 with TypeScript and Tailwind CSS. Renders a clean, responsive schedule matrix.\n"
-        "• Real-Time Protocol: SSE enables continuous push updates from the Python engine to the web dashboard without polling."
+        "The project is built using a modern, decoupled full-stack architecture:\n"
+        "1. Backend Engine (Python 3.10 with FastAPI): This is the brain. It holds the chromosome data structures, checks constraints, "
+        "runs the selection, crossover, mutation, and repair operators, and streams generation statistics in real-time.\n"
+        "2. Frontend Dashboard (Next.js 14 with TypeScript and Tailwind CSS): This is the user interface. It connects to the Python engine, "
+        "displays live metric cards, draws convergence graphs, and renders the symmetrical weekly schedule matrix.\n"
+        "3. Real-Time Streaming (Server-Sent Events - SSE): Traditional websites make you click a button and wait for a loading spinner. "
+        "With SSE, our Python engine pushes updates generation-by-generation, allowing you to watch the timetable evolve in real time."
     )
 
     add_h2("4.2 Live Optimizer Dashboard & Timetable Grid")
     add_p(
-        "The Live Optimizer dashboard provides real-time visibility into the optimization process. It displays four metric "
-        "cards (Constraint Feasibility, Objective Penalty Cost, Evolution Progress, and Fitness & Speed), parameter tuning sliders, "
-        "a live convergence trajectory area chart, and the symmetrical 8 AM – 5 PM weekly timetable grid."
+        "Figure 1 shows the Live Optimizer dashboard captured from the running local application after evolution has completed. "
+        "Notice the four metric cards at the top: Constraint Feasibility displays '0 conflicts', Objective Penalty Cost displays '0.0', "
+        "Evolution Progress displays '54 / 200 gens', and Fitness displays a perfect '1.0000' achieved in just 0.78 seconds. "
+        "Below the cards, the convergence chart shows the penalty dropping from 105 down to 0."
     )
 
     add_image_with_caption(
         os.path.join(os.getcwd(), "report_images", "01_live_optimizer_dashboard.png"),
-        "Figure 1: Live Optimizer Dashboard showing real-time KPI metric cards, evolution sliders, and convergence curve."
+        "Figure 1: Real-time Live Optimizer Dashboard showing completed evolution, 0 conflicts, 0.0 cost, and convergence curve."
+    )
+
+    add_p(
+        "Figure 2 illustrates the resulting Symmetrical Weekly Class Schedule Matrix. Each row represents a weekday (Monday to Friday) "
+        "and each column represents a teaching period from 8:00 AM to 5:00 PM. Notice the dedicated green column between Period 5 and "
+        "Period 6 for the universal lunch break (1:00 PM – 2:00 PM). Every course displays the subject name, assigned faculty member, "
+        "student batch, and room number with zero overlaps."
     )
 
     add_image_with_caption(
         os.path.join(os.getcwd(), "report_images", "02_timetable_grid.png"),
-        "Figure 2: Symmetrical Weekly Class Schedule Matrix displaying periods 1 to 8 with dedicated 1:00 PM – 2:00 PM lunch break."
+        "Figure 2: Populated Weekly Timetable Matrix displaying 8 periods with dedicated universal lunch break (1:00 PM – 2:00 PM)."
     )
 
     add_h2("4.3 The 6-Stage Operator Visualizer Suite")
     add_p(
-        "To explain the micro-mechanics of the algorithm during presentations and vivas, the application includes an Operator "
-        "Visualizer that breaks down the genetic optimization process into six educational stages:"
-    )
-    add_p(
-        "• Stage 1: Data to Chromosome Encoding (Mapping raw curriculum sessions into discrete gene tuples).\n"
-        "• Stage 2: Tournament Selection (Evaluating candidate pool and selecting the fittest parent).\n"
-        "• Stage 3: Two-Point Crossover (Visualizing segment recombination between Parent A and Parent B).\n"
-        "• Stage 4: Gene Mutation (Highlighting mutated gene positions in the chromosome).\n"
-        "• Stage 5: Constraint Repair (Demonstrating active local healing of overlapping classes).\n"
-        "• Stage 6: Final Generated Timetable (Decoding the repaired chromosome into the weekly timetable)."
+        "For academic vivas and presentations, the application includes a dedicated Operator Visualizer tab. It breaks down the "
+        "genetic algorithm into six step-by-step educational stages: Data to Encoding, Tournament Selection, Two-Point Crossover, "
+        "Gene Mutation, Constraint Repair, and Final Timetable. Figure 3 shows the visualizer interface and problem encoding summary."
     )
 
     add_image_with_caption(
         os.path.join(os.getcwd(), "report_images", "03_operator_visualizer.png"),
-        "Figure 3: Operator Visualizer interface demonstrating the six step-by-step evolutionary stages."
+        "Figure 3: Operator Visualizer interface demonstrating the problem modeling and chromosome gene structure."
+    )
+
+    add_p(
+        "Figure 4 captures Stage 2 (Tournament Selection) inside the visualizer. It displays a tournament pool of three candidate "
+        "chromosomes with their objective costs and fitness scores, visually highlighting the tournament winner that advances to the "
+        "mating pool."
     )
 
     add_image_with_caption(
         os.path.join(os.getcwd(), "report_images", "04_tournament_selection.png"),
-        "Figure 4: Tournament Selection Stage illustrating candidate pool evaluation, objective costs, and winner selection."
+        "Figure 4: Tournament Selection Stage illustrating candidate pool evaluation and selected tournament winner."
     )
 
     doc.add_page_break()
 
     # =========================================================================
-    # CHAPTER 5: EXPERIMENTAL RESULTS & SENSITIVITY ANALYSIS
+    # CHAPTER 5: EXPERIMENTAL RESULTS, SLIDER EFFECTS & TESTING
     # =========================================================================
     add_h1("Chapter 5: Results, Testing and Performance Analysis")
     
-    add_h2("5.1 Convergence Trajectory and Speed")
+    add_h2("5.1 Convergence Performance (From 105 Clashes to Zero in 0.78s)")
     add_p(
-        "Across standard test scenarios, the optimizer exhibits rapid convergence. In Generation 1, a random schedule contains "
-        "between 80 to 120 clashes (Cost ≈ 105.0). Within 4 generations, tournament selection and heuristic repair resolve the "
-        "bulk of conflicts. Between Generations 5 and 14, fine-tuning eliminates remaining room and teacher overlaps. The schedule "
-        "reaches zero clashes (Cost = 0.0, Fitness = 1.0000) around Generation 14 and terminates gracefully at Generation 54 after "
-        "the 40-generation stagnation check. Total runtime is typically 0.78 seconds."
+        "When you click 'Start GA Evolution', the algorithm executes with remarkable speed. Looking at the convergence chart in Figure 1, "
+        "we can clearly see the three phases of optimization:\n"
+        "• Phase 1 (Generations 1 to 4): Rapid Conflict Elimination. The random starting schedule has a cost of around 105. Tournament "
+        "selection and heuristic repair quickly resolve the most obvious classroom and faculty collisions, dropping the cost to 25.\n"
+        "• Phase 2 (Generations 5 to 14): Fine-Tuning. Crossover and mutation swap lingering conflicting classes into empty slots, driving "
+        "hard conflicts down to exactly zero (Cost = 0.0, Fitness = 1.0000).\n"
+        "• Phase 3 (Generations 15 to 54): Optimal Flatline. The schedule is already perfect. The 40-generation stagnation limit verifies "
+        "stability and automatically stops at Generation 54 in just 0.78 seconds."
     )
 
-    add_h2("5.2 Parameter Sensitivity Analysis")
+    add_h2("5.2 Slider Sensitivity: What Happens When You Tweak Parameters")
     add_p(
-        "The table below details how adjusting individual algorithm parameters affects optimization performance:"
+        "The control panel lets you tweak four parameters. Here is exactly what happens when you adjust each slider:"
     )
 
     tbl_sens = doc.add_table(rows=5, cols=4)
@@ -643,7 +674,7 @@ def build_report():
     
     sens_rows = [
         ("Parameter", "Default Value", "Effect of Decreasing", "Effect of Increasing"),
-        ("Population Size", "60", "Runs faster per generation; lower diversity; risks getting trapped in local minima.", "Higher diversity; explores larger solution space; slightly more CPU time."),
+        ("Population Size", "60", "Runs faster per generation; lower diversity; risks getting stuck in local minima.", "Higher diversity; explores larger solution space; slightly more CPU time."),
         ("Generations", "200", "Faster total run; may terminate prematurely in congested schedules.", "Allows more time to untangle complex bottlenecks; bypassed early if optimal."),
         ("Mutation Rate", "10%", "Population becomes rigid; cannot escape shared parental clashes.", "Too high (>35%) acts like random noise, destroying good schedules and oscillating."),
         ("Crossover Rate", "80%", "Offspring are mostly clones; slow discovery of new room/day combinations.", "Promotes rapid sharing of clash-free blocks from fit parents.")
@@ -666,14 +697,14 @@ def build_report():
             r.bold = is_h or (c_idx == 0)
             r.font.color.rgb = COLOR_BLACK
 
-    add_h2("5.3 Automated Pytest Suite Verification (29 Tests)")
+    add_h2("5.3 Automated Testing with Pytest (29 Tests Passing)")
     add_p(
-        "To verify algorithmic correctness and software stability, an automated pytest suite containing 29 test cases was "
-        "executed. All 29 tests pass with zero failures:\n"
-        "• test_constraints.py (5 tests): Confirms exact detection of room, faculty, batch, and capacity conflicts.\n"
-        "• test_fitness.py (3 tests): Validates penalty function weights and reciprocal fitness calculations.\n"
-        "• test_genetic_algorithm.py (15 tests): Tests tournament selection, two-point crossover, mutation, repair, and convergence.\n"
-        "• test_enhanced_features.py (6 tests): Validates Server-Sent Events streaming, preset APIs, and CSV timetable export."
+        "To ensure mathematical accuracy and prevent regression bugs, the backend is protected by an automated test suite written "
+        "in pytest. All 29 tests pass consistently:\n"
+        "• test_constraints.py (5 tests): Confirms 100% accuracy in detecting room clashes, faculty double-booking, and batch conflicts.\n"
+        "• test_fitness.py (3 tests): Tests penalty weighting and reciprocal fitness math.\n"
+        "• test_genetic_algorithm.py (15 tests): Tests tournament selection, two-point crossover, mutation, and constraint repair.\n"
+        "• test_enhanced_features.py (6 tests): Validates real-time SSE streaming, scenario preset switching, and CSV timetable export."
     )
 
     doc.add_page_break()
@@ -681,26 +712,27 @@ def build_report():
     # =========================================================================
     # CHAPTER 6: CONCLUSION & FUTURE WORK
     # =========================================================================
-    add_h1("Chapter 6: Conclusion and Future Work")
+    add_h1("Chapter 6: Conclusion and Future Roadmap")
     
-    add_h2("6.1 Summary of Achievements")
+    add_h2("6.1 Summary of Contributions")
     add_p(
-        "The Timetable Optimizer demonstrates the power of Metaheuristic Genetic Algorithms in solving real-world NP-hard "
-        "combinatorial optimization problems. Key contributions include:\n"
-        "1. Complete Elimination of Overlaps: Generates 100% physically valid timetables with zero teacher, room, or student clashes.\n"
-        "2. Sub-Second Optimization: Solves typical university department schedules in under 1 second (0.78s), replacing days of manual work.\n"
-        "3. Authentic College Architecture: Fully respects 8:00 AM – 5:00 PM operating hours and an invariant 1:00 PM – 2:00 PM lunch break.\n"
-        "4. Educational Explainability: Features real-time streaming charts and a 6-stage visualizer for classroom and viva presentations.\n"
-        "5. Live Deployment: Publicly accessible on Vercel at https://frontend-azure-kappa-xbtipqbzto.vercel.app."
+        "In this project, we successfully formulated, designed, and deployed Timetable Optimizer to solve the university course "
+        "scheduling problem using Constraint-Aware Genetic Algorithms. Key project contributions include:\n"
+        "1. 100% Feasibility: Completely eliminates all physical faculty, room, and student overlaps.\n"
+        "2. Sub-Second Speed: Generates optimal timetables in 0.78 seconds, replacing days of tedious manual scheduling.\n"
+        "3. Authentic College Schedule: Implements an 8:00 AM to 5:00 PM day with an invariant 1:00 PM – 2:00 PM universal lunch pause.\n"
+        "4. Heuristic Repair Innovation: Enhances standard genetic evolution with an active conflict-healing pass that guarantees rapid convergence.\n"
+        "5. Interactive Educational Suite: Features a real-time streaming dashboard and an interactive 6-stage operator visualizer for viva presentations.\n"
+        "6. Live Cloud Deployment: Successfully hosted and accessible globally on Vercel at https://frontend-azure-kappa-xbtipqbzto.vercel.app."
     )
 
     add_h2("6.2 Future Work")
     add_p(
         "Potential extensions for future development include:\n"
-        "• Open Elective Course Scheduling: Supporting cross-departmental elective bundles where students from multiple batches merge.\n"
-        "• Contiguous Lab Blocks: Handling multi-period (2-hour or 3-hour) laboratory blocks with teaching assistants.\n"
-        "• Faculty Personal Preferences: Allowing professors to indicate preferred days or morning/afternoon teaching windows.\n"
-        "• Calendar Sync: Direct iCal/Google Calendar export for automatic synchronization with student and faculty mobile devices."
+        "• Open Elective Course Scheduling: Supporting cross-departmental elective bundles where students from multiple branches merge.\n"
+        "• Multi-Period Practical Labs: Scheduling contiguous 2-hour or 3-hour laboratory blocks with teaching assistants.\n"
+        "• Faculty Personal Preferences: Allowing professors to indicate preferred teaching days or morning/afternoon windows.\n"
+        "• Mobile App & Google Calendar Sync: Direct iCal feed generation to sync schedules into student and faculty mobile calendars."
     )
 
     add_h1("References")
@@ -714,16 +746,17 @@ def build_report():
     for rf in refs:
         add_p(rf, space_after=4)
 
-    output_file = os.path.join(os.getcwd(), "Timetable_Optimizer_Project_Report_PEC.docx")
-    doc.save(output_file)
-    print(f"Final report successfully created at: {output_file}")
+    # Save to both paths
+    pec_file = os.path.join(os.getcwd(), "Timetable_Optimizer_Project_Report_PEC.docx")
+    doc.save(pec_file)
+    print(f"Final report successfully created at: {pec_file}")
 
     primary_file = os.path.join(os.getcwd(), "Timetable_Optimizer_Project_Report.docx")
     try:
         doc.save(primary_file)
         print(f"Also updated primary file: {primary_file}")
     except PermissionError:
-        print(f"Notice: {primary_file} is currently open in Word. Saved as {output_file}")
+        print(f"Notice: {primary_file} is currently open in Word. Saved to {pec_file}")
 
 if __name__ == "__main__":
     build_report()

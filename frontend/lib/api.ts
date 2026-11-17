@@ -8,10 +8,27 @@ import {
   StreamEvent,
 } from "./types";
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "";
+function getBaseUrl(): string {
+  if (process.env.NEXT_PUBLIC_API_URL) {
+    return process.env.NEXT_PUBLIC_API_URL;
+  }
+  if (typeof window !== "undefined") {
+    const host = window.location.hostname;
+    if (host === "localhost" || host === "127.0.0.1") {
+      return "http://127.0.0.1:8000";
+    }
+  }
+  return "http://127.0.0.1:8000";
+}
+
+export function getApiUrl(endpoint: string): string {
+  const base = getBaseUrl();
+  return `${base}${endpoint}`;
+}
 
 async function request<T>(endpoint: string, options?: RequestInit): Promise<T> {
-  const res = await fetch(`${BASE_URL}${endpoint}`, {
+  const url = getApiUrl(endpoint);
+  const res = await fetch(url, {
     ...options,
     headers: {
       "Content-Type": "application/json",
@@ -62,7 +79,11 @@ export async function runBenchmark(
 
 export async function fetchVisualizerStep(
   dataset: DatasetInput,
-  params?: { tournament_size?: number; mutation_rate?: number; random_seed?: number | null }
+  params?: {
+    tournament_size?: number;
+    mutation_rate?: number;
+    random_seed?: number;
+  }
 ): Promise<VisualizerStepResponse> {
   return request<VisualizerStepResponse>("/api/visualizer/step", {
     method: "POST",
@@ -76,7 +97,8 @@ export async function fetchVisualizerStep(
 }
 
 export async function exportCsv(timetable: GeneOut[]): Promise<string> {
-  const res = await fetch(`${BASE_URL}/api/export/csv`, {
+  const url = getApiUrl("/api/export/csv");
+  const res = await fetch(url, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ timetable }),
@@ -96,7 +118,8 @@ export async function streamOptimize(
   abortSignal?: AbortSignal
 ): Promise<void> {
   try {
-    const res = await fetch(`${BASE_URL}/api/optimize/stream`, {
+    const url = getApiUrl("/api/optimize/stream");
+    const res = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ dataset, config }),
@@ -134,9 +157,8 @@ export async function streamOptimize(
     callbacks.onDone();
   } catch (err: any) {
     if (err.name === "AbortError") {
-      callbacks.onDone();
       return;
     }
-    callbacks.onError(err instanceof Error ? err : new Error(String(err)));
+    callbacks.onError(err);
   }
 }

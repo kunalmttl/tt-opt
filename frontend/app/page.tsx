@@ -18,11 +18,44 @@ import {
 } from "@/lib/types";
 import { fetchScenarios, streamOptimize } from "@/lib/api";
 
+const FALLBACK_DATASET: DatasetInput = {
+  days: ["Mon", "Tue", "Wed", "Thu", "Fri"],
+  periods_per_day: 8,
+  batches: [
+    { batch_id: "B1", name: "AIML-A", student_count: 50 },
+    { batch_id: "B2", name: "AIML-B", student_count: 50 },
+  ],
+  faculty: [
+    { faculty_id: "F01", name: "Dr. A. Sharma", department: "CSE" },
+    { faculty_id: "F02", name: "Dr. B. Mehta", department: "CSE" },
+    { faculty_id: "F03", name: "Dr. C. Rao", department: "AI & ML" },
+    { faculty_id: "F04", name: "Dr. D. Iyer", department: "AI & ML" },
+    { faculty_id: "F05", name: "Dr. E. Nair", department: "Mathematics" },
+    { faculty_id: "F06", name: "Dr. F. Kapoor", department: "Mathematics" },
+  ],
+  rooms: [
+    { room_id: "R01", room_number: "LT-1", capacity: 80, room_type: "Lecture" },
+    { room_id: "R02", room_number: "LT-2", capacity: 80, room_type: "Lecture" },
+    { room_id: "R03", room_number: "LB-1", capacity: 40, room_type: "Lab" },
+    { room_id: "R04", room_number: "SR-1", capacity: 60, room_type: "Seminar" },
+  ],
+  subjects: [
+    { subject_id: "S01", name: "Artificial Intelligence", faculty_id: "F01", batch_id: "B1", sessions_per_week: 2, expected_students: 50, preferred_room_type: "Lecture" },
+    { subject_id: "S02", name: "Machine Learning", faculty_id: "F02", batch_id: "B2", sessions_per_week: 2, expected_students: 50, preferred_room_type: "Lecture" },
+    { subject_id: "S03", name: "Deep Learning", faculty_id: "F03", batch_id: "B1", sessions_per_week: 2, expected_students: 50, preferred_room_type: "Lecture" },
+    { subject_id: "S04", name: "Database Systems", faculty_id: "F04", batch_id: "B2", sessions_per_week: 2, expected_students: 50, preferred_room_type: "Lecture" },
+    { subject_id: "S05", name: "Operating Systems", faculty_id: "F05", batch_id: "B1", sessions_per_week: 2, expected_students: 50, preferred_room_type: "Lecture" },
+    { subject_id: "S06", name: "Computer Networks", faculty_id: "F06", batch_id: "B2", sessions_per_week: 2, expected_students: 50, preferred_room_type: "Lecture" },
+    { subject_id: "S07", name: "Data Structures", faculty_id: "F01", batch_id: "B1", sessions_per_week: 2, expected_students: 50, preferred_room_type: "Lecture" },
+    { subject_id: "S08", name: "Algorithms", faculty_id: "F02", batch_id: "B2", sessions_per_week: 2, expected_students: 50, preferred_room_type: "Lecture" },
+  ],
+};
+
 export default function HomePage() {
   const [activeTab, setActiveTab] = useState<"optimizer" | "visualizer">("optimizer");
   const [presets, setPresets] = useState<ScenarioPreset[]>([]);
   const [selectedPresetId, setSelectedPresetId] = useState<string>("compact-demo");
-  const [dataset, setDataset] = useState<DatasetInput | null>(null);
+  const [dataset, setDataset] = useState<DatasetInput | null>(FALLBACK_DATASET);
   const [isEditorOpen, setIsEditorOpen] = useState<boolean>(false);
 
   // GA Configuration
@@ -72,7 +105,7 @@ export default function HomePage() {
           setDataset(defaultPreset.dataset);
         }
       } catch (err) {
-        console.error("Failed to connect to backend", err);
+        console.warn("Backend not yet reachable, using fallback interactive demo scenario:", err);
       }
     }
     loadData();
@@ -191,7 +224,7 @@ export default function HomePage() {
         activeTab={activeTab}
         setActiveTab={setActiveTab}
         onOpenEditor={() => setIsEditorOpen(true)}
-        selectedScenarioName={activePreset?.metadata.name || "Default"}
+        selectedScenarioName={activePreset?.metadata.name || "Fast Interactive Demo"}
       />
 
       {/* Main Workspace Body */}
@@ -238,9 +271,15 @@ export default function HomePage() {
             {activeTab === "visualizer" && <VisualizerView dataset={dataset} />}
           </>
         ) : (
-          <div className="h-96 rounded-2xl border border-border bg-surface flex flex-col items-center justify-center gap-3 text-muted">
-            <div className="animate-spin h-6 w-6 border-2 border-neutral-400 border-t-transparent rounded-full" />
-            <span className="text-xs">Loading university scenario data...</span>
+          <div className="h-96 rounded-2xl border border-border bg-surface flex flex-col items-center justify-center gap-4 text-muted">
+            <div className="animate-spin h-6 w-6 border-2 border-forest border-t-transparent rounded-full" />
+            <span className="text-xs">Connecting to Optimization Engine...</span>
+            <button
+              onClick={() => setDataset(FALLBACK_DATASET)}
+              className="px-4 py-2 rounded-xl bg-forest text-white text-xs font-medium shadow-sm hover:bg-forest-hover transition-all"
+            >
+              Load Interactive Demo Scenario
+            </button>
           </div>
         )}
       </main>
